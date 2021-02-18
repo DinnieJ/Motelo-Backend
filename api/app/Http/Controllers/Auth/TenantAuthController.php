@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use JWTAuth;
 use Config;
 use App\Repositories\Tenant\TenantRepositoryInterface;
+use App\Http\Requests\Tenant\TenantLoginRequest;
+use App\Http\Requests\Tenant\TenantRegisterRequest;
 
 class TenantAuthController extends BaseController
 {
@@ -20,7 +22,7 @@ class TenantAuthController extends BaseController
         Config::set('auth.providers.users.model', App\Models\Tenant::class);
     }
 
-    public function login(Request $request)
+    public function login(TenantLoginRequest $request)
     {
         $creds = $request->only('email', 'password');
         $token = null;
@@ -39,6 +41,7 @@ class TenantAuthController extends BaseController
         $user = JWTAuth::user();
         return response()->json([
             'type' => 'Bearer',
+            'role' => 'Tenant',
             'TTL' => Config::get('jwt.ttl'),
             'token' => $token,
             'user' => $user
@@ -61,9 +64,10 @@ class TenantAuthController extends BaseController
         }
     }
 
-    public function register(Request $request)
+    public function register(TenantRegisterRequest $request)
     {
         $data = $request->only('name', 'email', 'date_of_birth', 'password');
+        $data['password'] = bcrypt($data['password']);
 
         $newTenant = null;
         try {
