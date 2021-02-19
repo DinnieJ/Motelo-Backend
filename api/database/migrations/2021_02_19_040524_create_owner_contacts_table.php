@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTenantsTable extends Migration
+class CreateOwnerContactsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateTenantsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_tenant', function (Blueprint $table) {
+        Schema::create('tb_owner_contact', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email');
-            $table->string('password');
-            $table->date('date_of_birth');
-            $table->tinyInteger('enabled')->default(1);
-            $table->rememberToken();
+            $table->unsignedBigInteger('owner_id');
+            $table->foreign('owner_id')->references('id')->on('tb_owner')->onDelete('cascade');
+            $table->unsignedBigInteger('contact_type_id');
+            $table->string('content');
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ class CreateTenantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_tenant');
+        Schema::dropIfExists('tb_owner_contact');
     }
 }

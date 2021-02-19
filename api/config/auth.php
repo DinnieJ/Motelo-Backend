@@ -43,6 +43,10 @@ return [
         'tenant' => [
             'driver' =>'jwt',
             'provider' => 'tenant'
+        ],
+        'owner' => [
+            'driver' => 'jwt',
+            'provier' => 'owner'
         ]
     ],
 
@@ -67,6 +71,11 @@ return [
         'tenant' => [
             'driver' => 'eloquent',
             'model' => App\Models\Tenant::class,
+        ],
+
+        'owner' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Owner::class,
         ],
 
         'users' => [

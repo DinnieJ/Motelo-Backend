@@ -20,3 +20,11 @@ Route::group(['prefix'=>'tenant'], function () {
     Route::post('logout', 'Auth\TenantAuthController@logout')->middleware(['assign.guard:tenant', 'auth.jwt']);
     Route::get('test', 'TestController@tenantTest')->middleware(['assign.guard:tenant', 'auth.jwt']);
 });
+
+Route::group(['prefix' => 'owner'], function () {
+    Route::post('login', 'Auth\OwnerAuthController@login');
+    Route::post('logout', 'Auth\OwnerAuthController@logout');
+    Route::post('register', 'Auth\OwnerAuthController@register');
+});
+
+Route::post('upload', 'TestController@uploadFile');
