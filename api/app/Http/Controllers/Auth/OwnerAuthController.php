@@ -39,8 +39,7 @@ class OwnerAuthController extends BaseController
                 'message' => 'Something went wrong!'
             ], 502);
         }
-        $user = auth('owner')->user()->with('contacts')->get();
-        //dd($user);
+        $user = auth('owner')->user()->load('contacts');
         return response()->json([
             'type' => 'Bearer',
             'role' => 'Owner',
@@ -74,6 +73,11 @@ class OwnerAuthController extends BaseController
         $newOwner = null;
         try {
             $newOwner = $this->ownerRepository->create($data);
+            $this->ownerContactRepository->create([
+                'owner_id' => $newOwner->id,
+                'contact_type_id' => 1,
+                'content' => $newOwner->email
+            ]);
             foreach ($data['contacts'] ?? [] as $contact) {
                 $this->ownerContactRepository->create([
                     'owner_id' => $newOwner->id,
@@ -93,6 +97,7 @@ class OwnerAuthController extends BaseController
     }
     public function getAuthUser(Request $request)
     {
-        return response()->json(auth('owner')->user()->with('contacts')->get());
+        $user = auth('owner')->user()->load('contacts');
+        return response()->json($user, 200);
     }
 }

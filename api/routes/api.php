@@ -26,7 +26,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('login', 'Auth\OwnerAuthController@login');
         Route::post('logout', 'Auth\OwnerAuthController@logout')->middleware(['auth.jwt', 'assign.guard:owner']);
         Route::post('register', 'Auth\OwnerAuthController@register');
-        Route::post('user', 'Auth\OwnerAuthController@getAuthUser')->middleware(['auth.jwt', 'assign.guard:owner']);
+        Route::get('user', 'Auth\OwnerAuthController@getAuthUser')->middleware(['auth.jwt', 'assign.guard:owner']);
     });
 });
 Route::group(['prefix' => 'tenant'], function () {
