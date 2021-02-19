@@ -23,6 +23,15 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $repositories = [
+            [
+                \App\Repositories\Tenant\TenantRepositoryInterface::class,
+                \App\Repositories\Tenant\TenantRepository::class
+            ]
+        ];
+
+        foreach ($repositories as $repo) {
+            $this->app->singleton($repo[0], $repo[1]);
+        }
     }
 }

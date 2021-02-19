@@ -40,12 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
-            'hash' => false,
-        ],
+        'tenant' => [
+            'driver' =>'jwt',
+            'provider' => 'tenant'
+        ]
     ],
 
     /*
@@ -66,15 +64,15 @@ return [
     */
 
     'providers' => [
+        'tenant' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Tenant::class,
+        ],
+
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*

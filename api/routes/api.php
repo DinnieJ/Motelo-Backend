@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix'=>'tenant'], function () {
+    Route::post('login', 'Auth\TenantAuthController@login');
+    Route::post('register', 'Auth\TenantAuthController@register');
+    Route::post('logout', 'Auth\TenantAuthController@logout')->middleware(['assign.guard:tenant', 'auth.jwt']);
+    Route::get('test', 'TestController@tenantTest')->middleware(['assign.guard:tenant', 'auth.jwt']);
 });
