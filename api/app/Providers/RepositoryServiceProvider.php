@@ -29,8 +29,12 @@ class RepositoryServiceProvider extends ServiceProvider
                 \App\Repositories\Tenant\TenantRepository::class
             ],
             [
-                \App\Repositories\Tenant\OwnerRepositoryInterface::class,
-                \App\Repositories\Tenant\OwnerRepository::class
+                \App\Repositories\Owner\OwnerRepositoryInterface::class,
+                \App\Repositories\Owner\OwnerRepository::class
+            ],
+            [
+                \App\Repositories\OwnerContact\OwnerContactRepositoryInterface::class,
+                \App\Repositories\OwnerContact\OwnerContactRepository::class
             ]
         ];
 

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use JWTAuth;
 
 class AssignGuard
 {
@@ -15,9 +16,12 @@ class AssignGuard
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if ($guard != null) {
-            auth()->shouldUse($guard);
+        if ($guard == JWTAuth::getPayload()->get('role')) {
+            return $next($request);
         }
-        return $next($request);
+
+        return response()->json([
+            'message' => 'You are unauthorized to make this request'
+        ], 403);
     }
 }

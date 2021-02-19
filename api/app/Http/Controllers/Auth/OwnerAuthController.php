@@ -7,19 +7,21 @@ use Illuminate\Http\Request;
 use JWTAuth;
 use Config;
 use App\Repositories\Owner\OwnerRepositoryInterface;
+use App\Repositories\OwnerContact\OwnerContactRepositoryInterface;
 use App\Http\Requests\Owner\OwnerLoginRequest;
 use App\Http\Requests\Owner\OwnerRegisterRequest;
 
 class OwnerAuthController extends BaseController
 {
     private $ownerRepository;
+    private $ownerContactRepository;
 
-    public function __construct(OwnerRepositoryInterface $ownerRepository)
-    {
+    public function __construct(
+        OwnerRepositoryInterface $ownerRepository,
+        OwnerContactRepositoryInterface $ownerContactRepository
+    ) {
         $this->ownerRepository = $ownerRepository;
-        Config::set('jwt.user', 'App\Models\Owner');
-        Config::set('auth.defaults.guard', 'owner');
-        Config::set('auth.providers.users.model', App\Models\Owner::class);
+        $this->ownerContactRepository = $ownerContactRepository;
     }
 
     public function login(OwnerLoginRequest $request)
@@ -27,7 +29,7 @@ class OwnerAuthController extends BaseController
         $creds = $request->only('email', 'password');
         $token = null;
         try {
-            if (!$token = JWTAuth::attempt($creds)) {
+            if (!$token = auth('owner')->attempt($creds)) {
                 return response()->json([
                     'message' => 'invalid_email_or_password',
                 ], 406);
@@ -37,8 +39,8 @@ class OwnerAuthController extends BaseController
                 'message' => 'Something went wrong!'
             ], 502);
         }
-
-        $user = JWTAuth::user();
+        $user = auth('owner')->user()->with('contacts')->get();
+        //dd($user);
         return response()->json([
             'type' => 'Bearer',
             'role' => 'Owner',
@@ -66,12 +68,19 @@ class OwnerAuthController extends BaseController
 
     public function register(OwnerRegisterRequest $request)
     {
-        $data = $request->only('name', 'email', 'date_of_birth', 'password');
+        $data = $request->only('name', 'email', 'date_of_birth', 'address', 'password', 'contacts');
         $data['password'] = bcrypt($data['password']);
 
         $newOwner = null;
         try {
             $newOwner = $this->ownerRepository->create($data);
+            foreach ($data['contacts'] ?? [] as $contact) {
+                $this->ownerContactRepository->create([
+                    'owner_id' => $newOwner->id,
+                    'contact_type_id' => $contact['type'],
+                    'content' => $contact['content']
+                ]);
+            }
             return response()->json([
                 'message' => 'Register successful',
                 'owner' => $newOwner
@@ -81,5 +90,9 @@ class OwnerAuthController extends BaseController
                 'message' => $e
             ], 502);
         }
+    }
+    public function getAuthUser(Request $request)
+    {
+        return response()->json(auth('owner')->user()->with('contacts')->get());
     }
 }

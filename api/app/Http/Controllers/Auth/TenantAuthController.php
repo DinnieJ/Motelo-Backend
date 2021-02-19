@@ -17,9 +17,6 @@ class TenantAuthController extends BaseController
     public function __construct(TenantRepositoryInterface $tenantRepository)
     {
         $this->tenantRepository = $tenantRepository;
-        Config::set('jwt.user', 'App\Models\Tenant');
-        Config::set('auth.defaults.guard', 'tenant');
-        Config::set('auth.providers.users.model', App\Models\Tenant::class);
     }
 
     public function login(TenantLoginRequest $request)
@@ -27,7 +24,7 @@ class TenantAuthController extends BaseController
         $creds = $request->only('email', 'password');
         $token = null;
         try {
-            if (!$token = JWTAuth::attempt($creds)) {
+            if (!$token = auth('tenant')->attempt($creds)) {
                 return response()->json([
                     'message' => 'invalid_email_or_password',
                 ], 406);
@@ -38,7 +35,7 @@ class TenantAuthController extends BaseController
             ], 502);
         }
 
-        $user = JWTAuth::user();
+        $user = auth('tenant')->user();
         return response()->json([
             'type' => 'Bearer',
             'role' => 'Tenant',
@@ -81,5 +78,10 @@ class TenantAuthController extends BaseController
                 'message' => $e
             ], 502);
         }
+    }
+
+    public function getAuthUser(Request $request)
+    {
+        return response()->json(auth('tenant')->user());
     }
 }

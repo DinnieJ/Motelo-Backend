@@ -46,7 +46,7 @@ return [
         ],
         'owner' => [
             'driver' => 'jwt',
-            'provier' => 'owner'
+            'provider' => 'owner'
         ]
     ],
 

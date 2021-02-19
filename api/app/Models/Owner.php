@@ -14,7 +14,7 @@ class Owner extends Authenticatable implements JWTSubject
     protected $table = "tb_owner";
 
     protected $fillable = [
-        'name', 'email', 'password', 'date_of_birth', 'enabled'
+        'name', 'email', 'password', 'date_of_birth', 'enabled', 'address'
     ];
 
     protected $hidden = [
@@ -38,6 +38,13 @@ class Owner extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'role' => 'owner'
+        ];
+    }
+
+    public function contacts()
+    {
+        return $this->hasMany(\App\Models\OwnerContact::class);
     }
 }

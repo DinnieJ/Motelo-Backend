@@ -12,6 +12,11 @@ class TestController extends Controller
         return 'tenant';
     }
 
+    public function ownerTest()
+    {
+        return 'owner';
+    }
+
     public function uploadFile(Request $request)
     {
         $path = $request->file('image');
