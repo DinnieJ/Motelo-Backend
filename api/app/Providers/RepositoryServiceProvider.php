@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -35,6 +36,15 @@ class RepositoryServiceProvider extends ServiceProvider
             [
                 \App\Repositories\OwnerContact\OwnerContactRepositoryInterface::class,
                 \App\Repositories\OwnerContact\OwnerContactRepository::class
+            ]
+            ,
+            [
+                \App\Repositories\Inn\InnRepositoryInterface::class,
+                \App\Repositories\Inn\InnRepository::class,
+            ],
+            [
+                \App\Repositories\Room\RoomRepositoryInterface::class,
+                \App\Repositories\Room\RoomRepository::class
             ]
         ];
 
