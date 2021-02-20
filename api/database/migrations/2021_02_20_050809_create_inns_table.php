@@ -22,7 +22,7 @@ class CreateInnsTable extends Migration
             $table->float('electric_price');
             $table->text('description');
             $table->string('address');
-            $table->point('location');
+            $table->point('location')->nullable(true);
             $table->integer('status');
             $table->timestamps();
         });
