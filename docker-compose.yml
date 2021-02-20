@@ -20,7 +20,7 @@ services:
     build:
       context: docker/php
       args: 
-        user: dev
+        user: datnn
         uid: 1000
     working_dir: /var/www/api
     restart: unless-stopped

@@ -7,19 +7,20 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Tenant extends Authenticatable implements JWTSubject
+class Owner extends Authenticatable implements JWTSubject
 {
     use Notifiable;
-
-    protected $table = "tb_tenant";
+    
+    protected $table = "tb_owner";
 
     protected $fillable = [
-        'name', 'email', 'date_of_birth', 'enabled', 'password'
+        'name', 'email', 'password', 'date_of_birth', 'enabled', 'address'
     ];
 
     protected $hidden = [
         'password', 'remember_token'
     ];
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -38,7 +39,12 @@ class Tenant extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [
-            'role' => 'tenant'
+            'role' => 'owner'
         ];
+    }
+
+    public function contacts()
+    {
+        return $this->hasMany(\App\Models\OwnerContact::class, 'owner_id');
     }
 }
