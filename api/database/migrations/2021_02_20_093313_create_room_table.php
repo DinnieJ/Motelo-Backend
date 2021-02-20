@@ -23,7 +23,7 @@ class CreateRoomTable extends Migration
             $table->float('price');
             $table->float('acreage');
             $table->text('description');
-            $table->tinyInteger('verified')->default(1);
+            $table->boolean('verified')->default(false);
             $table->timestamp('verified_at');
             $table->tinyInteger('available')->default(1);
             $table->integer('status');
