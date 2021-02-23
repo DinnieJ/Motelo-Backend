@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::group(['prefix'=>'tenant'], function () {
+    Route::group(['prefix' => 'tenant'], function () {
         Route::post('login', 'Auth\TenantAuthController@login');
         Route::post('register', 'Auth\TenantAuthController@register');
         Route::post('logout', 'Auth\TenantAuthController@logout')->middleware(['auth.jwt', 'assign.guard:tenant']);
         Route::get('user', 'Auth\TenantAuthController@getAuthUser')->middleware(['auth.jwt', 'assign.guard:tenant']);
     });
-    
+
     Route::group(['prefix' => 'owner'], function () {
         Route::post('login', 'Auth\OwnerAuthController@login');
         Route::post('logout', 'Auth\OwnerAuthController@logout')->middleware(['auth.jwt', 'assign.guard:owner']);
@@ -38,3 +38,7 @@ Route::group(['prefix' => 'owner'], function () {
 });
 
 Route::post('upload', 'TestController@uploadFile');
+
+Route::group(['prefix' => 'inn'], function () {
+    Route::get('/detail/{id}', 'Inn\InnController@getDetailInn');
+});
