@@ -16,17 +16,15 @@ class InnController extends BaseController
 {
     //
     protected $innRepository;
-    protected $innRepositoryInterface;
+
 
     /**
      * InnController constructor.
      * @param $innRepository
-     * @param $innRepositoryInterface
      */
-    public function __construct(InnRepository $innRepository, InnRepositoryInterface $innRepositoryInterface)
+    public function __construct(InnRepositoryInterface $innRepository)
     {
         $this->innRepository = $innRepository;
-        $this->innRepositoryInterface = $innRepositoryInterface;
     }
 
     public function getDetailInn(Request $request, $id)
