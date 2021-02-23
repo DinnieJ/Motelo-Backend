@@ -19,7 +19,7 @@ class Room extends Model
     ];
 
 
-    public function inns()
+    public function inn()
     {
         return $this->belongsTo(Inn::class, 'inn_id');
     }
