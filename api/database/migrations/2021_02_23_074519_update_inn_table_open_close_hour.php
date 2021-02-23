@@ -15,10 +15,10 @@ class UpdateInnTableOpenCloseHour extends Migration
     {
         //
         Schema::table('tb_inn', function (Blueprint $table) {
-            $table->integer('open_hour')->nullable(true)->after('electric_price');
-            $table->integer('open_minute')->nullable(true)->after('open_hour');
-            $table->integer('close_hour')->nullable(true)->after('open_minute');
-            $table->integer('close_minute')->nullable(true)->after('close_hour');
+            $table->integer('open_hour')->nullable()->after('electric_price');
+            $table->integer('open_minute')->nullable()->after('open_hour');
+            $table->integer('close_hour')->nullable()->after('open_minute');
+            $table->integer('close_minute')->nullable()->after('close_hour');
         });
     }
 
@@ -31,7 +31,7 @@ class UpdateInnTableOpenCloseHour extends Migration
     {
         //
         Schema::table('tb_inn', function (Blueprint $table) {
-            $table->dropColumn(['open_hour', 'open_minute', 'close_hour','close_minute']);
+            $table->dropColumn(['open_hour', 'open_minute', 'close_hour', 'close_minute']);
         });
     }
 }
