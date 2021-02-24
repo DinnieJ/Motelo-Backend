@@ -18,4 +18,9 @@ class Inn extends Model
         return $this->hasMany(Room::class, 'inn_id');
     }
 
+    public function features()
+    {
+        return $this->hasMany(InnFeature::class, 'inn_id');
+    }
+
 }

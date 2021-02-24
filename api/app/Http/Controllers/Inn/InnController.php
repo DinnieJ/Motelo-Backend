@@ -30,7 +30,7 @@ class InnController extends BaseController
     public function getDetailInn(Request $request, $id)
     {
 
-        $inn = $this->innRepository->with('rooms')->find($id);
+        $inn = $this->innRepository->with(['rooms','features'])->find($id);
 
         if (!$inn) {
             return response()->json(null, 404);
