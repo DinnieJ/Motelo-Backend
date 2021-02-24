@@ -14,7 +14,7 @@ class Owner extends Authenticatable implements JWTSubject
     protected $table = "tb_owner";
 
     protected $fillable = [
-        'name', 'email', 'password', 'date_of_birth', 'enabled', 'address'
+        'name', 'email', 'password', 'date_of_birth', 'enabled', 'address', 'password'
     ];
 
     protected $hidden = [
