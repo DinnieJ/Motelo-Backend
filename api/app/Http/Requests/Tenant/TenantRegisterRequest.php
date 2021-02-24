@@ -29,28 +29,28 @@ class TenantRegisterRequest extends FormRequest
             'email' => 'required|email:rfc,dns|unique:tb_tenant,email',
             'password' => 'required|min:8',
             'date_of_birth' => 'required|date',
-            'name' => 'required|string|regex:/^[a-zA-Z\s]*$/'
+            'name' => 'required|string|regex:/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]*$/'
         ];
     }
 
     public function messages()
     {
         return [
-            'email.required' => trans('responses.tenant.email.required'),
-            'email.email' => trans('responses.tenant.email.email'),
-            'email.unique' => trans('responses.tenant.email.unique'),
-            'password.required' => trans('responses.tenant.password.required'),
-            'password.min' => trans('responses.tenant.password.min'),
-            'date_of_birth.required' => trans('responses.tenant.date_of_birth.required'),
-            'date_of_birth.date' => trans('responses.tenant.date_of_birth.date'),
-            'name.required' => trans('responses.tenant.name.required'),
-            'name.string' => trans('responses.tenant.name.string'),
-            'name.regex' => trans('responses.tenant.name.alpha')
+            'email.required' => trans('responses.auth.email.required'),
+            'email.email' => trans('responses.auth.email.email'),
+            'email.unique' => trans('responses.auth.email.unique'),
+            'password.required' => trans('responses.auth.password.required'),
+            'password.min' => trans('responses.auth.password.min'),
+            'date_of_birth.required' => trans('responses.auth.date_of_birth.required'),
+            'date_of_birth.date' => trans('responses.auth.date_of_birth.date'),
+            'name.required' => trans('responses.auth.name.required'),
+            'name.string' => trans('responses.auth.name.string'),
+            'name.regex' => trans('responses.auth.name.regex')
         ];
     }
 
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
+        throw new HttpResponseException(response()->json($validator->errors()->first(), 422));
     }
 }
