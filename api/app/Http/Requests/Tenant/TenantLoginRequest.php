@@ -34,16 +34,16 @@ class TenantLoginRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.required' => trans('responses.tenant.email.required'),
-            'email.email' => trans('responses.tenant.email.email'),
-            'email.exists' => trans('responses.tenant.email.exists'),
-            'password.required' => trans('responses.tenant.password.required'),
-            'password.min' => trans('responses.tenant.password.min')
+            'email.required' => trans('responses.auth.email.required'),
+            'email.email' => trans('responses.auth.email.email'),
+            'email.exists' => trans('responses.auth.email.exists'),
+            'password.required' => trans('responses.auth.password.required'),
+            'password.min' => trans('responses.auth.password.min')
         ];
     }
 
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
+        throw new HttpResponseException(response()->json($validator->errors()->first(), 422));
     }
 }

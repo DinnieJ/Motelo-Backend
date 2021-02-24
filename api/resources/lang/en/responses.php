@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tenant' => [
+    'auth' => [
         'email' => [
             'email' => 'Email đang bị sai định dạng',
             'required' => 'Không để trống email',
@@ -20,7 +20,15 @@ return [
         'name' => [
             'required' => 'Không để trống tên',
             'string' => 'Nhập đúng định dạng chuỗi',
-            'alpha' => 'Tên không thể có số và kí tự đặc biệt'
+            'regex' => 'Tên không thể có số và kí tự đặc biệt'
+        ],
+        'address' => [
+            'required' => 'Không để trống địa chỉ',
+            'regex' => 'Không nhập kí tự đặc biệt cho địa chỉ ngoài dấu, - .'
+        ],
+        'contact' => [
+            'required' => 'Không để trống liên lạc',
+            'min' => 'Cần có tối thiểu :min thông tin liên lạc'
         ]
     ]
 ];
