@@ -27,6 +27,7 @@ class InnDetailResource extends JsonResource
             'location' => $this->location,
             'status' => $this->status,
             'rooms' => $this->rooms,
+            'features' => $this->features,
             'created_at' => $this->created_at->format('d-m-Y'),
             'updated_at' => $this->updated_at->format('d-m-Y')
 //            'created_at' => $this->created_at->format('d . m . Y')
