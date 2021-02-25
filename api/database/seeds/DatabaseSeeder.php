@@ -21,12 +21,14 @@ class DatabaseSeeder extends Seeder
         $this->call(MstFeatureTypeTableSeeder::class);
         $this->call(InnFeatureTableSeeder::class);
 
+//for tenant
+        $this->call(TenantTableSeeder::class);
+
 
 //for room
         $this->call(MstRoomTypeTableSeeder::class);
         $this->call(RoomTableSeeder::class);
         $this->call(RoomCommentTableSeeder::class);
-//for tenant
-        $this->call(TenantTableSeeder::class);
+
     }
 }
