@@ -23,5 +23,9 @@ class InnFeature extends Model
         return $this->belongsTo(Inn::class, 'inn_id');
     }
 
+    public function type()
+    {
+        return $this->belongsTo(MstFeatureType::class, 'inn_feature_id');
+    }
 
 }
