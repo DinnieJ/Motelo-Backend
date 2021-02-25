@@ -24,8 +24,6 @@ class InnDetailForRoomResource extends JsonResource
             'open_time' => $this->open_hour . ":" . $this->open_minute,
             'close_time' => $this->close_hour . ":" . $this->close_minute,
             'features' => $this->getFeatures()
-
-
         ];
     }
 
