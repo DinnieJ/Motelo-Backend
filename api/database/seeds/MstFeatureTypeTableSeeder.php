@@ -91,6 +91,24 @@ class MstFeatureTypeTableSeeder extends Seeder
                 'description' => 'Tủ đồ',
                 'created_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'title' => 'Camera',
+                'description' => 'Camera',
+                'created_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'title' => 'Khóa vân tay',
+                'description' => 'Khóa vân tay',
+                'created_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'title' => 'Bảo vệ',
+                'description' => 'Bảo vệ',
+                'created_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s')
             ]
 
 
