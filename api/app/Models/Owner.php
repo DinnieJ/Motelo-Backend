@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Owner extends Authenticatable implements JWTSubject
 {
     use Notifiable;
-    
+
     protected $table = "tb_owner";
 
     protected $fillable = [
@@ -46,5 +46,10 @@ class Owner extends Authenticatable implements JWTSubject
     public function contacts()
     {
         return $this->hasMany(\App\Models\OwnerContact::class, 'owner_id');
+    }
+
+    public function inns()
+    {
+        return $this->hasMany(Inn::class, 'owner_id');
     }
 }

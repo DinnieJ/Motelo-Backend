@@ -23,4 +23,9 @@ class Inn extends Model
         return $this->hasMany(InnFeature::class, 'inn_id');
     }
 
+    public function owner()
+    {
+        return $this->belongsTo(Owner::class, 'owner_id');
+    }
+
 }
