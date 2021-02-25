@@ -48,8 +48,8 @@ class Owner extends Authenticatable implements JWTSubject
         return $this->hasMany(\App\Models\OwnerContact::class, 'owner_id');
     }
 
-    public function inns()
+    public function inn()
     {
-        return $this->hasMany(Inn::class, 'owner_id');
+        return $this->hasOne(Inn::class, 'owner_id');
     }
 }
