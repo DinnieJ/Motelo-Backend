@@ -24,5 +24,9 @@ class Room extends Model
         return $this->belongsTo(Inn::class, 'inn_id');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(RoomComment::class, 'room_id');
+    }
 
 }
