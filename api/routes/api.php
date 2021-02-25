@@ -42,3 +42,6 @@ Route::post('upload', 'TestController@uploadFile');
 Route::group(['prefix' => 'inn'], function () {
     Route::get('/detail/{id}', 'Inn\InnController@getDetailInn');
 });
+Route::group(['prefix' => 'room'], function () {
+    Route::get('/detail/{id}', 'Room\RoomController@getDetailRoom');
+});
