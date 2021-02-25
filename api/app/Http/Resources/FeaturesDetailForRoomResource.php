@@ -15,8 +15,7 @@ class FeaturesDetailForRoomResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this['id'],
-            'title' => $this['type']['title']
+            'id' => $this['id']
         ];
     }
 }

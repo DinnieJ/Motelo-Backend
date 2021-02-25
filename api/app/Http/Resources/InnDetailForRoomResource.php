@@ -16,7 +16,9 @@ class InnDetailForRoomResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'owner_name' => $this['name'],
+            'address' => $this->address,
+            'inn_name' => $this->name,
+            'owner_name' => $this->owner->name,
             'owner_id' => $this->owner->id,
             'owner_contact' => $this->getOwnerContact(),
             'water_price' => $this->water_price,
