@@ -15,7 +15,8 @@ class UpdateRoomTable extends Migration
     {
         //
         Schema::table('tb_room', function (Blueprint $table) {
-            $table->integer('gender_type_id')->after('status');
+            $table->unsignedBigInteger('gender_type_id')->after('status');
+            $table->foreign('gender_type_id')->references('id')->on('mst_gender_type')->cascadeOnDelete();
         });
     }
 
@@ -27,5 +28,8 @@ class UpdateRoomTable extends Migration
     public function down()
     {
         //
+        Schema::table('tb_room', function (Blueprint $table) {
+            $table->dropColumn(['gender_type_id']);
+        });
     }
 }
