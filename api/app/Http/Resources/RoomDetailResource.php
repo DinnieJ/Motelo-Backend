@@ -25,6 +25,7 @@ class RoomDetailResource extends JsonResource
             'verified_at' => $this->verified_at->format('d-m-Y'),
             'available' => $this->available,
             'status' => $this->status,
+            'gender_type_id' => $this->gender_type_id,  
             'inn_detail' => new InnDetailForRoomResource($this->inn),
             'comments' =>  $this->getRoomComment(),
             'created_at' => $this->created_at->format('d-m-Y'),
