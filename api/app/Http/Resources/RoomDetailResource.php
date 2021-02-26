@@ -26,9 +26,18 @@ class RoomDetailResource extends JsonResource
             'available' => $this->available,
             'status' => $this->status,
             'inn_detail' => new InnDetailForRoomResource($this->inn),
-            'comments' => $this->comments,
+            'comments' =>  $this->getRoomComment(),
             'created_at' => $this->created_at->format('d-m-Y'),
             'updated_at' => $this->updated_at->format('d-m-Y')
         ];
+    }
+
+    private function getRoomComment()
+    {
+        $data = array_map(function ($value) {
+            return new RoomCommentForRoomResource($value);
+        }, $this->comments->toArray());
+
+        return $data;
     }
 }
