@@ -16,6 +16,7 @@ $factory->define(\App\Models\Room::class, function (Faker $faker) {
         'verified' => true,
         'verified_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
         'available' => 1,
-        'status' => $faker->randomDigit
+        'status' => $faker->randomDigit,
+        'gender_type_id' => \App\Models\MstGenderType::all()->random()->id
     ];
 });
