@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use function Symfony\Component\Translation\t;
 
 class RoomCommentForRoomResource extends JsonResource
 {
