@@ -19,7 +19,6 @@ class RoomCommentForRoomResource extends JsonResource
             'id' => $this['id'],
             'tenant_id' => $this['tenant_id'],
             'tenant_name' => $this['tenant_name'],
-            'room_id' => $this['room_id'],
             'comment' => $this['comment'],
             'created_at' => $this['created_at'],
             'updated_at' => $this['updated_at']
