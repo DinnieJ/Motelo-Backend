@@ -22,13 +22,13 @@ class MstGenderTypeSeeder extends Seeder
             ],
             [
                 'title' => 'man',
-                'icon' => 'Nam',
+                'description' => 'Nam',
                 'created_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
                 'title' => 'woman',
-                'icon' => 'Nữ',
+                'description' => 'Nữ',
                 'created_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s')
             ]
