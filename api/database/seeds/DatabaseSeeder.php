@@ -27,8 +27,10 @@ class DatabaseSeeder extends Seeder
 
 //for room
         $this->call(MstRoomTypeTableSeeder::class);
+        $this->call(MstGenderTypeSeeder::class);
         $this->call(RoomTableSeeder::class);
         $this->call(RoomCommentTableSeeder::class);
+
 
     }
 }
