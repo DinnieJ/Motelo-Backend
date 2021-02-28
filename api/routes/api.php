@@ -31,6 +31,9 @@ Route::group(['prefix' => 'auth'], function () {
 });
 Route::group(['prefix' => 'tenant'], function () {
     Route::get('test', 'TestController@tenantTest')->middleware(['auth.jwt', 'assign.guard:tenant']);
+    Route::post('/addcomment', 'RoomComment\RoomCommentController@addNewComment');
+    Route::delete('/deletecomment','RoomComment\RoomCommentController@deleteComment');
+    Route::post('/updatecomment', 'RoomComment\RoomCommentController@updateComment');
 });
 
 Route::group(['prefix' => 'owner'], function () {
