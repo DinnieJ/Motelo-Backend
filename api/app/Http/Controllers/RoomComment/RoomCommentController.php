@@ -68,9 +68,4 @@ class RoomCommentController extends BaseController
         return response()->json(null, 404);
     }
 
-    public function getComment()
-    {
-
-    }
-
 }
