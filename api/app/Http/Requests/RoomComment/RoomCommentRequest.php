@@ -27,7 +27,6 @@ class RoomCommentRequest extends FormRequest
     {
         return [
             //
-            'tenant_id' => 'required|integer|exists:tb_tenant,id',
             'room_id' => 'required|integer|exists:tb_room,id',
             'comment' => 'required'
         ];
@@ -36,11 +35,6 @@ class RoomCommentRequest extends FormRequest
     public function messages()
     {
         return [
-            //for tenant_id
-            'tenant_id.required' => trans('responses.tenant_comment.tenant_id.required'),
-            'tenant_id.integer' => trans('responses.tenant_comment.tenant_id.integer'),
-            'tenant_id.exists' => trans('responses.tenant_comment.tenant_id.exists'),
-
             //for room_id
             'room_id.required' => trans('responses.tenant_comment.room_id.required'),
             'room_id.integer' => trans('responses.tenant_comment.room_id.integer'),
