@@ -14,7 +14,7 @@ class RoomComment extends Model
         'updated_at' => 'datetime:d-m-Y'
     ];
     protected $fillable = [
-        'tenant_id', 'room_id'
+        'tenant_id', 'room_id' , 'comment'
     ];
 
     protected $appends = ['tenant_name'];
