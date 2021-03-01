@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RoomCommentRequest extends FormRequest
+class UpdateCommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,7 @@ class RoomCommentRequest extends FormRequest
     {
         return [
             //
-            'room_id' => 'required|integer|exists:tb_room,id',
+            'id' => 'integer|required|exists:tb_room_comment,id',
             'comment' => 'required'
         ];
     }
@@ -35,15 +35,11 @@ class RoomCommentRequest extends FormRequest
     public function messages()
     {
         return [
-            //for room_id
-            'room_id.required' => trans('responses.tenant_comment.room_id.required'),
-            'room_id.integer' => trans('responses.tenant_comment.room_id.integer'),
-            'room_id.exists' => trans('responses.tenant_comment.room_id.exists'),
+            'id.required' => trans('responses.tenant_comment.id.required'),
+            'id.integer' => trans('responses.tenant_comment.id.integer'),
+            'id.exists' => trans('responses.tenant_comment.id.exists'),
 
-            //for comment
             'comment.required' => trans('responses.tenant_comment.comment.required')
-
-
         ];
     }
 
