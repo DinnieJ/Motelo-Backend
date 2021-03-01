@@ -28,5 +28,4 @@ class Room extends Model
     {
         return $this->hasMany(RoomComment::class, 'room_id');
     }
-
 }

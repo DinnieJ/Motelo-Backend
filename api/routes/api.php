@@ -32,7 +32,7 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'tenant'], function () {
     Route::get('test', 'TestController@tenantTest')->middleware(['auth.jwt', 'assign.guard:tenant']);
     Route::post('/comment/add', 'RoomComment\RoomCommentController@addNewComment');
-    Route::delete('/comment/delete','RoomComment\RoomCommentController@deleteComment');
+    Route::delete('/comment/delete', 'RoomComment\RoomCommentController@deleteComment');
     Route::post('/comment/update', 'RoomComment\RoomCommentController@updateComment');
 });
 
@@ -47,4 +47,5 @@ Route::group(['prefix' => 'inn'], function () {
 });
 Route::group(['prefix' => 'room'], function () {
     Route::get('/detail/{id}', 'Room\RoomController@getDetailRoom');
+    Route::get('/list', 'Room\RoomController@getRoomsByQuery');
 });
