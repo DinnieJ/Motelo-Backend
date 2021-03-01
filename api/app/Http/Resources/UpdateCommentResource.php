@@ -22,6 +22,7 @@ class UpdateCommentResource extends JsonResource
                 'tenant_id' => $this->tenant_id,
                 'tenant_name' => $this->tenant_name,
                 'room_id' => $this->room_id,
+                'comment' => $this->comment,
                 'created_at' => $this->created_at->format('d-m-Y'),
                 'updated_at' => $this->updated_at->format('d-m-Y')
             ]

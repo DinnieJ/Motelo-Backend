@@ -4,6 +4,7 @@ namespace App\Http\Controllers\RoomComment;
 
 use App\Http\Requests\RoomComment\DeleteCommentRequest;
 use App\Http\Requests\RoomComment\RoomCommentRequest;
+use App\Http\Requests\RoomComment\UpdateCommentRequest;
 use App\Http\Resources\AddCommentResource;
 use App\Http\Resources\UpdateCommentResource;
 use App\Repositories\RoomComment\RoomCommentRepositoryInterface;
@@ -26,7 +27,7 @@ class RoomCommentController extends BaseController
 
     public function addNewComment(RoomCommentRequest $request)
     {
-        $tenant_id = $request->post('tenant_id');
+        $tenant_id = auth('tenant')->user()->id;
         $room_id = $request->post('room_id');
         $comment = $request->post('comment');
 
@@ -38,7 +39,7 @@ class RoomCommentController extends BaseController
         return response()->json(new AddCommentResource($newComment), 201);
     }
 
-    public function updateComment(Request $request)
+    public function updateComment(UpdateCommentRequest $request)
     {
         $id = $request->post('id');
         $commentBody = $request->post('comment');
