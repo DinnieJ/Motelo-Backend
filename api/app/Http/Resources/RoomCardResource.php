@@ -19,6 +19,7 @@ class RoomCardResource extends JsonResource
             'name' => $this['title'],
             'room_type' => $this['room_type_id'],
             'gender' => $this['gender_type_id'],
+            'price' => $this['price'],
             'acreage' => $this['acreage'],
             'address' => $this['inn']['address'],
             'inn_name' => $this['inn']['name'],

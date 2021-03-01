@@ -27,8 +27,16 @@ class ListRoomRequest extends FormRequest
     public function rules()
     {
         return [
-            'gender' => ['integer', Rule::in(\App\Models\MstGenderType::all()->pluck('id')->toArray())],
-            'room_type' => ['integer', Rule::in(\App\Models\MstRoomType::all()->pluck('id')->toArray())],
+            'gender' => 'integer|exists:mst_room_type,id',
+            'room_type' => ['regex:/^\d+(?:,\d+)*$/',
+                function ($attribute, $value, $fail) {
+                    $featuresArr = \explode(',', $value);
+                    $needle = \App\Models\MstRoomType::all()->pluck('id')->toArray();
+                    $diff = \array_diff($featuresArr, $needle);
+                    if (count($diff) != 0) {
+                        return $fail(trans('responses.list_room.room_type.in'));
+                    }
+                }],
             'min_price' => 'numeric',
             'max_price' => 'numeric',
             'features' => ['regex:/^\d+(?:,\d+)*$/',
@@ -48,8 +56,8 @@ class ListRoomRequest extends FormRequest
     {
         return [
             'gender.integer' => trans('responses.list_room.gender.integer'),
-            'gender.in' => trans('responses.list_room.gender.in'),
-            'room_type.integer' => trans('responses.list_room.room_type.integer'),
+            'gender.exists' => trans('responses.list_room.gender.exists'),
+            'room_type.regex' => trans('responses.list_room.room_type.integer'),
             'room_type.in' => trans('responses.list_room.room_type.in'),
             'min_price.numeric' => trans('responses.list_room.min_price.numeric'),
             'max_price.numeric' => trans('responses.list_room.max_price.numeric'),

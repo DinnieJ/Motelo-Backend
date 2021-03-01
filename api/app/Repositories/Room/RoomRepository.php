@@ -30,7 +30,8 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
         }
 
         if ($request->filled('room_type')) {
-            $query = $query->where('room_type_id', $request->room_type);
+            $roomTypeArr = \explode(',', $request->room_type);
+            $query = $query->whereIn('room_type_id', $roomTypeArr);
         }
 
         if ($request->filled('min_price')) {
@@ -47,7 +48,12 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
                 $q->whereIn('inn_feature_id', $featuresData);
             });
         }
-        $data = $query->paginate(10)->withQueryString();
+
+        if ($request->filled('verified') && $request->verified) {
+            $query = $query->where('verified', 1);
+        }
+        
+        $data = $query->paginate(4)->withQueryString();
         return $data;
     }
 }

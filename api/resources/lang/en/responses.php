@@ -56,10 +56,10 @@ return [
     'list_room' => [
         'gender' => [
             'integer' => 'Mã giới tính không hợp lệ',
-            'in' => 'Mã giới tính không tồn tại'
+            'exists' => 'Mã giới tính không tồn tại'
         ],
         'room_type' => [
-            'integer' => 'Mã loại phòng không hợp lệ',
+            'regex' => 'Mã loại phòng phải ghi ở dạng số cách biệt bởi dấu ,',
             'in' => 'Mã loại phòng không tồn tại'
         ],
         'min_price' => [
@@ -69,7 +69,7 @@ return [
             'numeric' => 'Giá tối đa không hợp lệ'
         ],
         'features' => [
-            'regex' => 'Mã thuộc tính phòng phải ghi ở dạng số cách biệt bởi dấu',
+            'regex' => 'Mã thuộc tính phòng phải ghi ở dạng số cách biệt bởi dấu ,',
             'in' => 'Mã thuộc tính phòng không tồn tại',
         ]
     ]
