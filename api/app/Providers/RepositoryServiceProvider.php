@@ -49,6 +49,10 @@ class RepositoryServiceProvider extends ServiceProvider
             [
                 \App\Repositories\RoomComment\RoomCommentRepositoryInterface::class,
                 \App\Repositories\RoomComment\RoomCommentRepository::class
+            ],
+            [
+                \App\Repositories\RoomFavorite\RoomFavoriteRepositoryInterface::class,
+                \App\Repositories\RoomFavorite\RoomFavoriteRepository::class
             ]
         ];
 
