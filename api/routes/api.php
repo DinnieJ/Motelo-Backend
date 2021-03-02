@@ -36,6 +36,13 @@ Route::group(['prefix' => 'tenant'], function () {
         Route::delete('/comment/delete', 'RoomComment\RoomCommentController@deleteComment');
         Route::post('/comment/update', 'RoomComment\RoomCommentController@updateComment');
     });
+    Route::middleware(['auth.jwt', 'assign.guard:tenant'])->group(function () {
+        Route::group(['prefix' => 'favorite'], function () {
+            Route::post('/add', 'RoomFavorite\RoomFavoriteController@addFavorite');
+            Route::post('/remove' ,'RoomFavorite\RoomFavoriteController@removeFavorite');
+        });
+    });
+
 });
 
 Route::group(['prefix' => 'owner'], function () {
