@@ -20,9 +20,9 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
         if ($request->filled('keyword')) {
             $keyword = $request->keyword;
             $query = $query->where('title', 'LIKE', '%' . $keyword . '%')
-                            ->orWhereHas('inn', function ($q) use ($keyword) {
-                                $q->where('name', 'LIKE', '%' . $keyword . '%');
-                            });
+                ->orWhereHas('inn', function ($q) use ($keyword) {
+                    $q->where('name', 'LIKE', '%' . $keyword . '%');
+                });
         }
 
         if ($request->filled('gender')) {
@@ -52,11 +52,11 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
         if ($request->filled('verified') && $request->verified) {
             $query = $query->where('verified', 1);
         }
-        
+
         $data = $query->paginate(4)->withQueryString();
         return $data;
     }
-    
+
     public function getRoomInformation($room_id, $tenant_id = null)
     {
         $withConditions = [
@@ -64,7 +64,9 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
             },
             'inn.owner.contacts' => function () {
             },
-            'comments' => function () use ($room_id) {
+            'comments' => function ($query) use ($room_id) {
+                $query->orderBy('created_at', 'DESC');
+                $query->limit(5);
             }
         ];
 
