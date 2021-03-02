@@ -56,4 +56,5 @@ Route::group(['prefix' => 'inn'], function () {
 });
 Route::group(['prefix' => 'room'], function () {
     Route::get('/detail/{id}', 'Room\RoomController@getDetailRoom');
+    Route::get('/list', 'Room\RoomController@getRoomsByQuery');
 });

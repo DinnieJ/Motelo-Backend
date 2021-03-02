@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller as BaseController;
 use App\Http\Resources\RoomDetailResource;
+use App\Http\Resources\ListRoomCardResource;
+use App\Http\Requests\Room\ListRoomRequest;
 use App\Repositories\Room\RoomRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -23,7 +25,6 @@ class RoomController extends BaseController
 
     public function getDetailRoom(Request $request, $id)
     {
-
         $room = null;
         $tenant = auth('tenant')->user();
 
@@ -39,7 +40,11 @@ class RoomController extends BaseController
             return response()->json(new RoomDetailResource($room), 200);
         }
         return response()->json(null, 404);
-
     }
 
+    public function getRoomsByQuery(ListRoomRequest $request)
+    {
+        $data = $this->roomRepository->searchByRequest($request);
+        return response()->json(new ListRoomCardResource($data->toArray()), 200);
+    }
 }

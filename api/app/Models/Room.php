@@ -33,5 +33,4 @@ class Room extends Model
     {
         return $this->hasMany(RoomFavorite::class, 'room_id');
     }
-
 }
