@@ -21,17 +21,9 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 
 
         $withConditions = [
-            'inn.features.type' => function ($query) use ($room_id) {
-
-
-            },
-            'inn.owner.contacts' => function () {
-
-            },
-
-            'comments' => function ($query) use ($room_id) {
-            }
-
+            'inn.features.type' => function () use ($room_id) {},
+            'inn.owner.contacts' => function () {},
+            'comments' => function () use ($room_id) {}
         ];
 
         $room = $this->model->with($withConditions);
