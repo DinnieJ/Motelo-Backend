@@ -52,5 +52,12 @@ return [
             'integer' => 'ID của comment phải là số nguyên dương',
             'exists' => 'ID của comment không tồn tại'
         ]
+    ],
+    'favorite' => [
+        'room_id' => [
+            'required' => 'ID của phòng không được để trống',
+            'integer' => 'ID của phòng phải là số nguyên dương',
+            'exists' =>  'ID của phòng không tồn tại'
+        ]
     ]
 ];
