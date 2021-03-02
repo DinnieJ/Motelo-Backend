@@ -28,4 +28,9 @@ class Room extends Model
     {
         return $this->hasMany(RoomComment::class, 'room_id');
     }
+
+    public function favorites()
+    {
+        return $this->hasMany(RoomFavorite::class, 'room_id');
+    }
 }

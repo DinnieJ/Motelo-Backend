@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller as BaseController;
-use App\Http\Resources\InnDetailResource;
 use App\Http\Resources\RoomDetailResource;
 use App\Http\Resources\ListRoomCardResource;
 use App\Http\Requests\Room\ListRoomRequest;
@@ -26,12 +25,21 @@ class RoomController extends BaseController
 
     public function getDetailRoom(Request $request, $id)
     {
-        $room = $this->roomRepository->with(['inn.features.type', 'inn.owner.contacts', 'comments'])->find($id);
+        $room = null;
+        $tenant = auth('tenant')->user();
 
-        if (!$room) {
-            return response()->json(null, 404);
+        if ($tenant) {
+            $room = $this->roomRepository->getRoomInformation($id, $tenant->id);
+        } else {
+            $room = $this->roomRepository->getRoomInformation($id);
         }
-        return response()->json(new RoomDetailResource($room), 200);
+
+        if ($room) {
+            $room = $room->toArray();
+            $room['favorited'] = isset($room['favorites']) && count($room['favorites']);
+            return response()->json(new RoomDetailResource($room), 200);
+        }
+        return response()->json(null, 404);
     }
 
     public function getRoomsByQuery(ListRoomRequest $request)

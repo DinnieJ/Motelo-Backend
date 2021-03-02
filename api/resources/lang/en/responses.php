@@ -72,5 +72,12 @@ return [
             'regex' => 'Mã thuộc tính phòng phải ghi ở dạng số cách biệt bởi dấu ,',
             'in' => 'Mã thuộc tính phòng không tồn tại',
         ]
+    ],
+    'favorite' => [
+        'room_id' => [
+            'required' => 'ID của phòng không được để trống',
+            'integer' => 'ID của phòng phải là số nguyên dương',
+            'exists' =>  'ID của phòng không tồn tại'
+        ]
     ]
 ];
