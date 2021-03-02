@@ -15,21 +15,22 @@ class RoomDetailResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->title,
-            'room_type_id' => $this->room_type_id,
-            'price' => $this->price,
-            'acreage' => $this->acreage,
-            'description' => $this->description,
-            'verified' => $this->verified,
-            'verified_at' => $this->verified_at->format('d-m-Y'),
-            'available' => $this->available,
-            'status' => $this->status,
-            'gender_type_id' => $this->gender_type_id,  
-            'inn_detail' => new InnDetailForRoomResource($this->inn),
-            'comments' =>  $this->getRoomComment(),
-            'created_at' => $this->created_at->format('d-m-Y'),
-            'updated_at' => $this->updated_at->format('d-m-Y')
+            'id' => $this['id'],
+            'name' => $this['title'],
+            'room_type_id' => $this['room_type_id'],
+            'price' => $this['price'],
+            'acreage' => $this['price'],
+            'description' => $this['price'],
+            'verified' => $this['verified'],
+            'verified_at' => $this['verified_at'],
+            'available' => $this['available'],
+            'status' => $this['status'],
+            'favorited' => $this['favorited'],
+            'gender_type_id' => $this['gender_type_id'],
+            'inn_detail' => new InnDetailForRoomResource($this['inn']),
+            'comments' => $this->getRoomComment(),
+            'created_at' => $this['created_at'],
+            'updated_at' => $this['updated_at']
         ];
     }
 
@@ -37,7 +38,7 @@ class RoomDetailResource extends JsonResource
     {
         $data = array_map(function ($value) {
             return new RoomCommentForRoomResource($value);
-        }, $this->comments->toArray());
+        }, $this['comments']);
 
         return $data;
     }
