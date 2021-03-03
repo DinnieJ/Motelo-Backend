@@ -65,8 +65,7 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
             'inn.owner.contacts' => function () {
             },
             'comments' => function ($query) use ($room_id) {
-                $query->orderBy('created_at', 'DESC');
-                $query->limit(5);
+                $query->orderBy('created_at', 'DESC')->limit(5);
             }
         ];
 
