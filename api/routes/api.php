@@ -39,7 +39,7 @@ Route::group(['prefix' => 'tenant'], function () {
     Route::middleware(['auth.jwt', 'assign.guard:tenant'])->group(function () {
         Route::group(['prefix' => 'favorite'], function () {
             Route::post('/add', 'RoomFavorite\RoomFavoriteController@addFavorite');
-            Route::post('/remove' ,'RoomFavorite\RoomFavoriteController@removeFavorite');
+            Route::post('/remove', 'RoomFavorite\RoomFavoriteController@removeFavorite');
         });
     });
 
@@ -57,4 +57,7 @@ Route::group(['prefix' => 'inn'], function () {
 Route::group(['prefix' => 'room'], function () {
     Route::get('/detail/{id}', 'Room\RoomController@getDetailRoom');
     Route::get('/list', 'Room\RoomController@getRoomsByQuery');
+    Route::get('/favorites', 'Room\RoomController@getRoomsByMostFavorite');
+    Route::get('/latest', 'Room\RoomController@getLatestRoom');
+    Route::get('/verified', 'Room\RoomController@getVerfiedRoom');
 });
