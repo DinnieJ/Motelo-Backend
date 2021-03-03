@@ -4,10 +4,13 @@
 namespace App\Repositories\Room;
 
 use App\Models\Room;
+use App\Models\RoomFavorite;
+use Illuminate\Support\Facades\DB;
 use Prettus\Repository\Eloquent\BaseRepository;
 
 class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 {
+
     public function model()
     {
         // TODO: Implement model() method.
@@ -82,5 +85,34 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
         }
         $room = $room->where('id', $room_id)->first();
         return $room;
+    }
+
+    public function getTop4FavoritesRoom()
+    {
+
+        $getTopFourID = RoomFavorite::select('room_id', DB::raw(' COUNT(room_id) AS Total'))
+            ->groupBy('room_id')
+            ->limit(4)->pluck('room_id')->toArray();
+        $getTopFourRoom = $this->with('inn')->whereIn('id', $getTopFourID)->get()->toArray();
+        return $getTopFourRoom;
+    }
+
+    public function findLatestRoom()
+    {
+        $latest_rooms = $this->with('inn')->orderBy('created_at', 'DESC')
+            ->limit(4)
+            ->get()->toArray();
+        return $latest_rooms;
+
+    }
+
+    public function findVerifiedRoom()
+    {
+        $verified_rooms = $this->with('inn')->where('verified', 1)
+            ->inRandomOrder()
+            ->limit(6)
+            ->get()
+            ->toArray();
+        return $verified_rooms;
     }
 }
