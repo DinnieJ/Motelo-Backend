@@ -19,7 +19,7 @@ class AddFavoriteRoomResponse extends JsonResource
             'room_favorite' => [
                 'id' => $this->id,
                 'room_id' => $this->room_id,
-                'tenant_id' => $this->id,
+                'tenant_id' => $this->tenant_id,
                 'created_at' => $this->created_at->format('d-m-Y'),
                 'updated_at' => $this->updated_at->format('d-m-Y')
             ]
