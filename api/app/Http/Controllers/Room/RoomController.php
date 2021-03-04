@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller as BaseController;
+use App\Http\Resources\RoomCardResource;
 use App\Http\Resources\RoomDetailResource;
 use App\Http\Resources\ListRoomCardResource;
 use App\Http\Requests\Room\ListRoomRequest;
@@ -47,4 +48,34 @@ class RoomController extends BaseController
         $data = $this->roomRepository->searchByRequest($request);
         return response()->json(new ListRoomCardResource($data->toArray()), 200);
     }
+
+    public function getRoomsByMostFavorite(Request $request)
+    {
+        $data = $this->roomRepository->getTop4FavoritesRoom();
+        $return_data = array_map(function ($value) {
+            return new RoomCardResource($value);
+        }, $data);
+        return response()->json($return_data, 200);
+
+    }
+
+    public function getLatestRoom(Request $request)
+    {
+        $rooms = $this->roomRepository->findLatestRoom();
+        $return_data = array_map(function ($value) {
+            return new RoomCardResource($value);
+        }, $rooms);
+        return response()->json($return_data, 200);
+    }
+
+    public function getVerfiedRoom(Request $request)
+    {
+        $verfiedRooms = $this->roomRepository->findVerifiedRoom();
+        $return_data = array_map(function ($value) {
+            return new RoomCardResource($value);
+        }, $verfiedRooms);
+        return response()->json($return_data, 200);
+    }
+
+
 }
