@@ -77,5 +77,17 @@ class RoomController extends BaseController
         return response()->json($return_data, 200);
     }
 
+    public function getFavoritesByUser(Request $request)
+    {
+        $tenant_id = auth('tenant')->user()->id;
+
+        $favorites_room = $this->roomRepository->getFavoritesRoomByTenant($tenant_id);
+        foreach ($favorites_room as &$item) {
+            $item['favorited'] = isset($item['favorites']) && count($item['favorites']);
+        }
+        return response()->json(new ListRoomCardResource($favorites_room->toArray()), 200);
+
+    }
+
 
 }

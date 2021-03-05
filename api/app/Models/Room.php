@@ -14,6 +14,7 @@ class Room extends Model
         'updated_at' => 'datetime:d-m-Y'
     ];
 
+
     protected $fillable = [
         'title', 'inn_id', 'room_type_id', 'price', 'acreage', 'description', 'verified', 'verified_at', 'available', 'status'
     ];
