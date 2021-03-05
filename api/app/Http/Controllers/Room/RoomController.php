@@ -37,7 +37,7 @@ class RoomController extends BaseController
 
         if ($room) {
             $room = $room->toArray();
-            //room['favorited'] = isset($room['favorites']) && count($room['favorites']);
+            $room['favorited'] = isset($room['favorites']) && count($room['favorites']);
             return response()->json(new RoomDetailResource($room), 200);
         }
         return response()->json(null, 404);
@@ -82,7 +82,11 @@ class RoomController extends BaseController
         $tenant_id = auth('tenant')->user()->id;
 
         $favorites_room = $this->roomRepository->getFavoritesRoomByTenant($tenant_id);
+        foreach ($favorites_room as &$item) {
+            $item['favorited'] = isset($item['favorites']) && count($item['favorites']);
+        }
         return response()->json(new ListRoomCardResource($favorites_room->toArray()), 200);
+
     }
 
 
