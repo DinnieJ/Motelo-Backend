@@ -115,4 +115,14 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
             ->toArray();
         return $verified_rooms;
     }
+
+    public function getFavoritesRoomByTenant($tenant_id)
+    {
+        $favorites_room_id = RoomFavorite::select('room_id')
+            ->where('tenant_id', $tenant_id)
+            ->pluck('room_id')
+            ->toArray();
+        $favorites_rooms = $this->with('inn')->whereIn('id', $favorites_room_id)->paginate(2);
+        return $favorites_rooms;
+    }
 }
