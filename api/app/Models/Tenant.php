@@ -14,7 +14,7 @@ class Tenant extends Authenticatable implements JWTSubject
     protected $table = "tb_tenant";
 
     protected $fillable = [
-        'name', 'email', 'phone_number  ', 'date_of_birth', 'enabled', 'password'
+        'name', 'email', 'phone_number', 'date_of_birth', 'enabled', 'password'
     ];
 
     protected $hidden = [
