@@ -14,7 +14,6 @@ class Room extends Model
         'updated_at' => 'datetime:d-m-Y'
     ];
 
-    protected $appends = ['favorited']  ;
 
     protected $fillable = [
         'title', 'inn_id', 'room_type_id', 'price', 'acreage', 'description', 'verified', 'verified_at', 'available', 'status'
@@ -34,17 +33,5 @@ class Room extends Model
     public function favorites()
     {
         return $this->hasMany(RoomFavorite::class, 'room_id');
-    }
-
-    public function getFavoritedAttribute()
-    {
-        $tenant = auth('tenant')->user();
-        if($tenant){
-            $likes = $this->favorites()->where('tenant_id', $tenant->id);
-            if ($likes) {
-                return true;
-            }
-        }
-        return false;
     }
 }
