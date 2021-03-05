@@ -31,15 +31,18 @@ Route::group(['prefix' => 'auth'], function () {
 });
 Route::group(['prefix' => 'tenant'], function () {
     Route::get('test', 'TestController@tenantTest')->middleware(['auth.jwt', 'assign.guard:tenant']);
+    //Route for comment
     Route::middleware(['auth.jwt', 'assign.guard:tenant'])->group(function () {
         Route::post('/comment/add', 'RoomComment\RoomCommentController@addNewComment');
         Route::delete('/comment/delete', 'RoomComment\RoomCommentController@deleteComment');
         Route::post('/comment/update', 'RoomComment\RoomCommentController@updateComment');
     });
+    //Route for add+remove favorite
     Route::middleware(['auth.jwt', 'assign.guard:tenant'])->group(function () {
         Route::group(['prefix' => 'favorite'], function () {
             Route::post('/add', 'RoomFavorite\RoomFavoriteController@addFavorite');
             Route::post('/remove', 'RoomFavorite\RoomFavoriteController@removeFavorite');
+            Route::get('/list', 'Room\RoomController@getFavoritesByUser');
         });
     });
 
