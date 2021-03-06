@@ -52,9 +52,13 @@ class RoomController extends BaseController
     public function getRoomsByMostFavorite(Request $request)
     {
         $data = $this->roomRepository->getTop4FavoritesRoom();
+        foreach ($data as &$item) {
+            $item['favorited'] = true;
+        }
         $return_data = array_map(function ($value) {
             return new RoomCardResource($value);
         }, $data);
+
         return response()->json($return_data, 200);
 
     }
@@ -62,6 +66,9 @@ class RoomController extends BaseController
     public function getLatestRoom(Request $request)
     {
         $rooms = $this->roomRepository->findLatestRoom();
+        foreach ($rooms as &$item) {
+            $item['favorited'] = true;
+        }
         $return_data = array_map(function ($value) {
             return new RoomCardResource($value);
         }, $rooms);
@@ -71,6 +78,9 @@ class RoomController extends BaseController
     public function getVerfiedRoom(Request $request)
     {
         $verfiedRooms = $this->roomRepository->findVerifiedRoom();
+        foreach ($verfiedRooms as &$item) {
+            $item['favorited'] = true;
+        }
         $return_data = array_map(function ($value) {
             return new RoomCardResource($value);
         }, $verfiedRooms);
