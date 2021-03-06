@@ -26,7 +26,8 @@ class RoomFavoriteController extends BaseController
     public function addFavorite(FavoriteRoomRequest $request)
     {
         $tenant_id = auth('tenant')->user()->id;
-        $room_id = $request->post('room_id');
+        $room_id = intval($request->post('room_id'));
+
         $exist_fav = $this->roomFavoriteRepository->findWhere([
             'tenant_id' => $tenant_id,
             'room_id' => $room_id
