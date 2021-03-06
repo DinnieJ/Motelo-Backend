@@ -20,6 +20,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('register', 'Auth\TenantAuthController@register');
         Route::post('logout', 'Auth\TenantAuthController@logout')->middleware(['auth.jwt', 'assign.guard:tenant']);
         Route::get('user', 'Auth\TenantAuthController@getAuthUser')->middleware(['auth.jwt', 'assign.guard:tenant']);
+        Route::post('edit', 'Auth\TenantAuthController@updateTenant')->middleware(['auth.jwt', 'assign.guard:tenant']);
     });
 
     Route::group(['prefix' => 'owner'], function () {
@@ -45,7 +46,6 @@ Route::group(['prefix' => 'tenant'], function () {
             Route::get('/list', 'Room\RoomController@getFavoritesByUser');
         });
     });
-
 });
 
 Route::group(['prefix' => 'owner'], function () {
