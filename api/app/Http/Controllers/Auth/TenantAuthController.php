@@ -64,7 +64,7 @@ class TenantAuthController extends BaseController
 
     public function register(TenantRegisterRequest $request)
     {
-        $data = $request->only('name', 'email', 'date_of_birth', 'password');
+        $data = $request->only('name', 'email', 'date_of_birth', 'phone_number' , 'password');
         $data['password'] = bcrypt($data['password']);
 
         $newTenant = null;
