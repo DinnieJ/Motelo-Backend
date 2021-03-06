@@ -9,6 +9,7 @@ use Config;
 use App\Repositories\Tenant\TenantRepositoryInterface;
 use App\Http\Requests\Tenant\TenantLoginRequest;
 use App\Http\Requests\Tenant\TenantRegisterRequest;
+use App\Http\Requests\Tenant\TenantUpdateRequest;
 
 class TenantAuthController extends BaseController
 {
@@ -83,5 +84,28 @@ class TenantAuthController extends BaseController
     public function getAuthUser(Request $request)
     {
         return response()->json(auth('tenant')->user());
+    }
+
+    public function updateTenant(TenantUpdateRequest $request)
+    {
+        $data = $request->only('name', 'date_of_birth', 'phone_number');
+
+        $tenant = auth('tenant')->user();
+
+        foreach ($data as $key => $value) {
+            $tenant->{$key} = $data[$key];
+        }
+
+        try {
+            $tenant->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Something went wrong!'
+            ], 500);
+        }
+
+        return response()->json([
+            'message' => 'Thay đổi thông tin thành công'
+        ], 200);
     }
 }
