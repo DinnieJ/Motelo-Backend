@@ -28,7 +28,7 @@ class RoomCommentController extends BaseController
     public function addNewComment(RoomCommentRequest $request)
     {
         $tenant_id = auth('tenant')->user()->id;
-        $room_id = $request->post('room_id');
+        $room_id = intval($request->post('room_id'));
         $comment = $request->post('comment');
 
         $newComment = $this->roomCommentRepository->create([
