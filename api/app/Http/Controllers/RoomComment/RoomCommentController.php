@@ -58,7 +58,8 @@ class RoomCommentController extends BaseController
 
     public function deleteComment(DeleteCommentRequest $request)
     {
-        $comment_id = $request->get('id');
+        $comment_id = $request->post('id');
+
         $comment = $this->roomCommentRepository->find($comment_id);
         if ($comment) {
             $comment->delete();
