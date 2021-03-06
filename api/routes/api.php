@@ -35,7 +35,7 @@ Route::group(['prefix' => 'tenant'], function () {
     //Route for comment
     Route::middleware(['auth.jwt', 'assign.guard:tenant'])->group(function () {
         Route::post('/comment/add', 'RoomComment\RoomCommentController@addNewComment');
-        Route::delete('/comment/delete', 'RoomComment\RoomCommentController@deleteComment');
+        Route::post('/comment/delete', 'RoomComment\RoomCommentController@deleteComment');
         Route::post('/comment/update', 'RoomComment\RoomCommentController@updateComment');
     });
     //Route for add+remove favorite
