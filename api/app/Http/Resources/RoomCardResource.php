@@ -25,7 +25,7 @@ class RoomCardResource extends JsonResource
             'inn_name' => $this['inn']['name'],
             'verified' => $this['verified'],
             'available' => $this['available'],
-            'favorited' => $this['favorited']
+            'favorited' => isset($this['favorites']) && count($this['favorites'])
         ];
     }
 }

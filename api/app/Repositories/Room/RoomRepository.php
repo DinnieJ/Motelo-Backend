@@ -10,16 +10,23 @@ use Prettus\Repository\Eloquent\BaseRepository;
 
 class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 {
-
     public function model()
     {
         // TODO: Implement model() method.
         return Room::class;
     }
 
-    public function searchByRequest($request)
+    public function searchByRequest($request, $tenant = null)
     {
         $query = $this->with(['inn', 'inn.owner', 'inn.features']);
+
+        if ($tenant) {
+            $query = $query->with(['favorites' => function ($query) use ($tenant) {
+                return $query->whereHas('tenants', function ($tQuery) use ($tenant) {
+                    return $tQuery->where('id', $tenant->id);
+                })->get();
+            }]);
+        }
         if ($request->filled('keyword')) {
             $keyword = $request->keyword;
             $query = $query->where('title', 'LIKE', '%' . $keyword . '%')
@@ -87,33 +94,71 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
         return $room;
     }
 
-    public function getTop4FavoritesRoom()
+    public function findTopFavoritesRoom($tenant = null)
     {
-
-        $getTopFourID = RoomFavorite::select('room_id', DB::raw(' COUNT(room_id) AS Total'))
+        $topFavoriteRoomIds = RoomFavorite::select('room_id', DB::raw(' COUNT(room_id) AS Total'))
             ->groupBy('room_id')
-            ->limit(4)->pluck('room_id')->toArray();
-        $getTopFourRoom = $this->with('inn')->whereIn('id', $getTopFourID)->get()->toArray();
-        return $getTopFourRoom;
-    }
-
-    public function findLatestRoom()
-    {
-        $latest_rooms = $this->with('inn')->orderBy('created_at', 'DESC')
             ->limit(4)
-            ->get()->toArray();
-        return $latest_rooms;
+            ->pluck('room_id')
+            ->toArray();
 
+        $topFavoriteRooms = $this->with(['inn']);
+        if ($tenant) {
+            $topFavoriteRooms = $topFavoriteRooms->with(['favorites' => function ($query) use ($tenant) {
+                if ($tenant) {
+                    return $query->whereHas('tenants', function ($tQuery) use ($tenant) {
+                        return $tQuery->where('id', $tenant->id);
+                    })->get();
+                }
+            }]);
+        }
+
+        $topFavoriteRooms = $topFavoriteRooms
+            ->whereIn('id', $topFavoriteRoomIds)
+            ->get()
+            ->toArray();
+        return $topFavoriteRooms;
     }
 
-    public function findVerifiedRoom()
+    public function findLatestRoom($tenant = null)
     {
-        $verified_rooms = $this->with('inn')->where('verified', 1)
+        $latest_rooms = $this->with(['inn']);
+
+        if ($tenant) {
+            $latest_rooms = $latest_rooms->with(['favorites' => function ($query) use ($tenant) {
+                return $query->whereHas('tenants', function ($tQuery) use ($tenant) {
+                    return $tQuery->where('id', $tenant->id);
+                })->get();
+            }]);
+        }
+
+        $latest_rooms = $latest_rooms->orderBy('created_at', 'DESC')
+            ->limit(4)
+            ->get()
+            ->toArray();
+        
+        return $latest_rooms;
+    }
+
+    public function findVerifiedRoom($tenant = null)
+    {
+        $verifiedRooms = $this->with(['inn']);
+
+        if ($tenant) {
+            $verifiedRooms = $verifiedRooms->with(['favorites' => function ($query) use ($tenant) {
+                return $query->whereHas('tenants', function ($tQuery) use ($tenant) {
+                    return $tQuery->where('id', $tenant->id);
+                })->get();
+            }]);
+        }
+        
+        $verifiedRooms = $verifiedRooms->where('verified', 1)
             ->inRandomOrder()
             ->limit(6)
             ->get()
             ->toArray();
-        return $verified_rooms;
+        
+        return $verifiedRooms;
     }
 
     public function getFavoritesRoomByTenant($tenant_id)
@@ -122,9 +167,9 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
             ->where('tenant_id', $tenant_id)
             ->pluck('room_id')
             ->toArray();
+        
         $withConditions = [
             'inn' => function ($query) {
-
             },
             'favorites' => function ($query) use ($favorites_room_id, $tenant_id) {
                 $query->where([
@@ -133,7 +178,7 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
             }
         ];
 
-        $favorites_rooms = $this->with($withConditions)->whereIn('id', $favorites_room_id)->paginate(2);
+        $favorites_rooms = $this->with($withConditions)->whereIn('id', $favorites_room_id)->paginate(4);
         return $favorites_rooms;
     }
 }

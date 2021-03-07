@@ -12,4 +12,9 @@ class RoomFavorite extends Model
     protected $fillable = [
         'tenant_id', 'room_id'
     ];
+
+    public function tenants()
+    {
+        return $this->hasMany(Tenant::class, 'id', 'tenant_id');
+    }
 }

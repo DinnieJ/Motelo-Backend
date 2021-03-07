@@ -45,23 +45,30 @@ class RoomController extends BaseController
 
     public function getRoomsByQuery(ListRoomRequest $request)
     {
-        $data = $this->roomRepository->searchByRequest($request);
+        $data = $this->roomRepository->searchByRequest($request, auth('tenant')->user());
+        
         return response()->json(new ListRoomCardResource($data->toArray()), 200);
     }
 
     public function getRoomsByMostFavorite(Request $request)
     {
-        $data = $this->roomRepository->getTop4FavoritesRoom();
+        $tenant = auth('tenant')->user();
+
+        $data = $this->roomRepository->findTopFavoritesRoom($tenant);
+
         $return_data = array_map(function ($value) {
             return new RoomCardResource($value);
         }, $data);
-        return response()->json($return_data, 200);
 
+        return response()->json($return_data, 200);
     }
 
     public function getLatestRoom(Request $request)
     {
-        $rooms = $this->roomRepository->findLatestRoom();
+        $tenant = auth('tenant')->user();
+
+        $rooms = $this->roomRepository->findLatestRoom($tenant);
+
         $return_data = array_map(function ($value) {
             return new RoomCardResource($value);
         }, $rooms);
@@ -70,10 +77,14 @@ class RoomController extends BaseController
 
     public function getVerfiedRoom(Request $request)
     {
-        $verfiedRooms = $this->roomRepository->findVerifiedRoom();
+        $tenant = auth('tenant')->user();
+
+        $verfiedRooms = $this->roomRepository->findVerifiedRoom($tenant);
+
         $return_data = array_map(function ($value) {
             return new RoomCardResource($value);
         }, $verfiedRooms);
+
         return response()->json($return_data, 200);
     }
 
@@ -82,12 +93,7 @@ class RoomController extends BaseController
         $tenant_id = auth('tenant')->user()->id;
 
         $favorites_room = $this->roomRepository->getFavoritesRoomByTenant($tenant_id);
-        foreach ($favorites_room as &$item) {
-            $item['favorited'] = isset($item['favorites']) && count($item['favorites']);
-        }
+
         return response()->json(new ListRoomCardResource($favorites_room->toArray()), 200);
-
     }
-
-
 }

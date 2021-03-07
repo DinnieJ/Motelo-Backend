@@ -42,4 +42,9 @@ class Tenant extends Authenticatable implements JWTSubject
             'role' => 'tenant'
         ];
     }
+
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class, 'tb_room_favorite', 'tenant_id', 'room_id');
+    }
 }
