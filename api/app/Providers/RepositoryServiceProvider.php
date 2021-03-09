@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -53,6 +52,10 @@ class RepositoryServiceProvider extends ServiceProvider
             [
                 \App\Repositories\RoomFavorite\RoomFavoriteRepositoryInterface::class,
                 \App\Repositories\RoomFavorite\RoomFavoriteRepository::class
+            ],
+            [
+                \App\Repositories\RoomImage\RoomImageRepositoryInterface::class,
+                \App\Repositories\RoomImage\RoomImageRepository::class
             ]
         ];
 

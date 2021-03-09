@@ -14,6 +14,7 @@ return [
     */
 
     'default' => env('FILESYSTEM_DRIVER', 'local'),
+    's3_folder_path' => env('S3_FOLDER_URL', 'https://motelo-app.s3.ap-east-1.amazonaws.com/'),
 
     /*
     |--------------------------------------------------------------------------
