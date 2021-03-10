@@ -50,6 +50,11 @@ Route::group(['prefix' => 'tenant'], function () {
 
 Route::group(['prefix' => 'owner'], function () {
     Route::get('test', 'TestController@ownerTest')->middleware(['auth.jwt', 'assign.guard:owner']);
+    Route::middleware(['auth.jwt', 'assign.guard:owner'])->group(function () {
+        Route::group(['prefix' => 'inn'], function () {
+            Route::post('/create', 'Inn\InnController@createNewInn');
+        });
+    });
 });
 
 Route::post('upload', 'TestController@uploadFile');
