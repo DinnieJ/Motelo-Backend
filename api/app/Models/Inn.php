@@ -10,7 +10,7 @@ class Inn extends Model
     protected $table = 'tb_inn';
 
     protected $fillable = [
-        'name', 'owner_id', 'water_price', 'electric_price', 'description', 'address', 'location', 'status'
+        'name', 'owner_id', 'water_price', 'electric_price', 'open_hour', 'open_minute', 'close_hour', 'close_minute', 'description', 'address', 'location', 'status'
     ];
 
     public function rooms()
