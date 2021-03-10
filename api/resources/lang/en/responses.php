@@ -77,7 +77,49 @@ return [
         'room_id' => [
             'required' => 'ID của phòng không được để trống',
             'integer' => 'ID của phòng phải là số nguyên dương',
-            'exists' =>  'ID của phòng không tồn tại'
+            'exists' => 'ID của phòng không tồn tại'
         ]
+    ],
+    'inn' => [
+        'name' => [
+            'required' => 'Không để trống tên nhà trọ'
+        ],
+        'water_price' => [
+            'required' => 'Không để trống giá nước',
+            'numeric' => 'Giá nước phải là số',
+            'gt' => 'Giá nước phải là số dương'
+        ],
+        'electric_price' => [
+            'required' => 'Không để trống giá điện',
+            'numeric' => 'Giá điện phải là số thực',
+            'gt' => 'Giá điện phải là số dương'
+        ],
+        'open_hour' => [
+            'required' => 'Không để trống giờ mở cửa',
+            'integer' => 'Giờ mở cửa phải là số dương',
+        ],
+        'close_hour' => [
+            'required' => 'Không để trống giờ đóng cửa',
+            'integer' => 'Giờ đóng cửa phải là số dương',
+        ],
+        'open_minute' => [
+            'required' => 'Không để trống phút mở cửa',
+            'integer' => 'Phút mở cửa phải là số dương',
+        ],
+        'close_minute' => [
+            'required' => 'Không để trống phút đóng cửa',
+            'integer' => 'Phút đóng cửa phải là số dương',
+        ],
+        'description' => [
+            'required' => 'Không được để trống miêu tả nhà'
+        ],
+        'address' => [
+            'required' => 'Không để trống địa chỉ nhà'
+        ],
+        'location'=> [
+            'required' => 'Không để trống địa chỉ map'
+        ]
+
+
     ]
 ];
