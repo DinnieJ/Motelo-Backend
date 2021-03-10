@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 
+use App\Repositories\InnFeature\InnFeatureRepository;
+use App\Repositories\InnFeature\InnFeatureRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -53,6 +55,10 @@ class RepositoryServiceProvider extends ServiceProvider
             [
                 \App\Repositories\RoomFavorite\RoomFavoriteRepositoryInterface::class,
                 \App\Repositories\RoomFavorite\RoomFavoriteRepository::class
+            ],
+            [
+                InnFeatureRepositoryInterface::class,
+                InnFeatureRepository::class
             ]
         ];
 
