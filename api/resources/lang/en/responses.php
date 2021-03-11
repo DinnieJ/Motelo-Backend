@@ -91,7 +91,7 @@ return [
         ],
         'electric_price' => [
             'required' => 'Không để trống giá điện',
-            'numeric' => 'Giá điện phải là số thực',
+            'numeric' => 'Giá điện phải là số',
             'gt' => 'Giá điện phải là số dương'
         ],
         'open_hour' => [
