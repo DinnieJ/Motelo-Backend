@@ -29,7 +29,7 @@ class InnRepository extends BaseRepository implements InnRepositoryInterface
             }
         ];
         $inn = $this->select('*', DB::raw('ST_X(location) AS latitude , ST_Y(location) AS longitude'))
-            ->where('id', $id)->with($withConditions)->get()->toArray();
+            ->where('id', $id)->with($withConditions)->first();
         return $inn;
     }
 }

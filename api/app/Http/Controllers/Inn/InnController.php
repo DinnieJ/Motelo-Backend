@@ -51,9 +51,7 @@ class InnController extends BaseController
         if (!$inn) {
             return response()->json(null, 404);
         }
-        return response()->json(array_map(function ($value) {
-            return new InnDetailResource($value);
-        }, $inn), 200);
+        return response()->json(new InnDetailResource($inn), 200);
     }
 
     public function createNewInn(CreateInnRequest $request)
