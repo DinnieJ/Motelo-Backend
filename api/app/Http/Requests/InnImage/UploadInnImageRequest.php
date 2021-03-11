@@ -27,7 +27,7 @@ class UploadInnImageRequest extends FormRequest
     {
         return [
             //
-            'images.*' => 'required|mimes:png,jpeg,jpg',
+            'images.*' => 'required|mimes:png,jpeg,jpg|max:10240',
             'inn_id' => 'required|integer|exists:tb_inn,id'
         ];
     }
