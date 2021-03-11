@@ -8,6 +8,11 @@ class Inn extends Model
 {
     //
     protected $table = 'tb_inn';
+    protected $casts = [
+
+        'created_at' => 'datetime:d-m-Y',
+        'updated_at' => 'datetime:d-m-Y'
+    ];
 
     protected $fillable = [
         'name', 'owner_id', 'water_price', 'electric_price', 'open_hour', 'open_minute', 'close_hour', 'close_minute', 'description', 'address', 'location', 'status'
