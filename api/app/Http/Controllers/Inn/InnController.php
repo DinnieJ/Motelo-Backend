@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Inn;
 
 use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\Inn\CreateInnRequest;
+use App\Http\Requests\InnImage\UploadInnImageRequest;
 use App\Http\Resources\InnDetailResource;
 use App\Repositories\Inn\InnRepositoryInterface;
 use App\Repositories\InnFeature\InnFeatureRepositoryInterface;
 use App\Repositories\InnImage\InnImageRepositoryInterface;
 use App\Traits\FileHelper;
+use Faker\Calculator\Inn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -44,12 +46,14 @@ class InnController extends BaseController
     public function getDetailInn(Request $request, $id)
     {
 
-        $inn = $this->innRepository->with(['rooms', 'features'])->find($id);
+        $inn = $this->innRepository->findInnByID($id);
 
         if (!$inn) {
             return response()->json(null, 404);
         }
-        return response()->json(new InnDetailResource($inn), 200);
+        return response()->json(array_map(function ($value) {
+            return new InnDetailResource($value);
+        }, $inn), 200);
     }
 
     public function createNewInn(CreateInnRequest $request)
@@ -103,7 +107,7 @@ class InnController extends BaseController
         }
     }
 
-    public function uploadImages(Request $request)
+    public function uploadImages(UploadInnImageRequest $request)
     {
         $images = $request->file('images');
         $inn_id = $request->post('inn_id');
