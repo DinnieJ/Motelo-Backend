@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\Inn;
 
 
+use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\Inn\CreateInnRequest;
 use App\Http\Resources\InnDetailResource;
 use App\Repositories\Inn\InnRepositoryInterface;
 use App\Repositories\InnFeature\InnFeatureRepositoryInterface;
+use App\Repositories\InnImage\InnImageRepositoryInterface;
+use App\Traits\FileHelper;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller as BaseController;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 
 class InnController extends BaseController
@@ -17,18 +21,23 @@ class InnController extends BaseController
     //
     private $innRepository;
     private $innFeatureRepository;
+    private $innImageRepository;
+
+    use FileHelper;
 
     /**
      * InnController constructor.
      * @param $innRepository
      * @param $innFeatureRepository
+     * @param $innImageRepository
      */
-    public function __construct(
-        InnRepositoryInterface $innRepository,
-        InnFeatureRepositoryInterface $innFeatureRepository)
+    public function __construct(InnRepositoryInterface $innRepository,
+                                InnFeatureRepositoryInterface $innFeatureRepository,
+                                InnImageRepositoryInterface $innImageRepository)
     {
         $this->innRepository = $innRepository;
         $this->innFeatureRepository = $innFeatureRepository;
+        $this->innImageRepository = $innImageRepository;
     }
 
 
@@ -55,6 +64,8 @@ class InnController extends BaseController
             'location', 'status');
 
         $location = $inn_data['location'];
+
+
         try {
             $new_inn = $this->innRepository->create([
                 'name' => $inn_data['name'],
@@ -72,12 +83,15 @@ class InnController extends BaseController
             ]);
 
 
+            //insert features into tb_inn_feature
             foreach ($inn_data['features'] ?? [] as $feature) {
+
                 $this->innFeatureRepository->create([
                     'inn_id' => $new_inn->id,
                     'inn_feature_id' => $feature,
                 ]);
             }
+
             return response()->json([
                 'message' => 'Tạo nhà trọ mới thành công',
                 'inn_id' => $new_inn->id
@@ -87,6 +101,33 @@ class InnController extends BaseController
                 'message' => 'Có lỗi xảy ra'
             ], 500);
         }
+    }
+
+    public function uploadImages(Request $request)
+    {
+        $images = $request->file('images');
+        $inn_id = $request->post('inn_id');
+        foreach ($images as $img) {
+            $originalName = $img->getClientOriginalName();
+            $uploadImg = null;
+
+            try {
+                $uploadImg = Storage::disk('s3')->put("/inns/{$inn_id}", $img);
+                $s3FileName = $this->getS3Filename($uploadImg);
+                $this->innImageRepository->create([
+                    'inn_id' => $inn_id,
+                    'image_url' => Config::get('filesystems.s3_folder_path') . $uploadImg,
+                    'filename' => $s3FileName
+                ]);
+
+
+            } catch (\Exception $exception) {
+                return $exception;
+            }
+        }
+        return response()->json([
+            'message' => 'Upload ảnh thành công'
+        ], 200);
     }
 
 
