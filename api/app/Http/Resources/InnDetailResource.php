@@ -24,13 +24,12 @@ class InnDetailResource extends JsonResource
             'close_time' => $this->close_hour . ":" . $this->close_minute,
             'description' => $this->description,
             'address' => $this->address,
-            'location' => $this->location,
+            'location' => $this->latitude . " " . $this->longitude,
             'status' => $this->status,
             'rooms' => $this->rooms,
-            'features' => $this->features,
+            'features' => array_column($this->features->toArray(),'inn_feature_id'),
             'created_at' => $this->created_at->format('d-m-Y'),
             'updated_at' => $this->updated_at->format('d-m-Y')
-//            'created_at' => $this->created_at->format('d . m . Y')
         ];
     }
 }

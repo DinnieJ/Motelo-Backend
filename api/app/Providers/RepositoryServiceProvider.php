@@ -53,6 +53,14 @@ class RepositoryServiceProvider extends ServiceProvider
             [
                 \App\Repositories\RoomFavorite\RoomFavoriteRepositoryInterface::class,
                 \App\Repositories\RoomFavorite\RoomFavoriteRepository::class
+            ],
+            [
+                \App\Repositories\InnFeature\InnFeatureRepositoryInterface::class,
+                \App\Repositories\InnFeature\InnFeatureRepository::class
+            ],
+            [
+                \App\Repositories\InnImage\InnImageRepositoryInterface::class,
+                \App\Repositories\InnImage\InnImageRepository::class
             ]
         ];
 
