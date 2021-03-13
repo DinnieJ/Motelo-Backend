@@ -15,6 +15,7 @@ use Faker\Calculator\Inn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -130,6 +131,96 @@ class InnController extends BaseController
         return response()->json([
             'message' => 'Upload ảnh thành công'
         ], 200);
+    }
+
+
+    public function updateInn(Request $request)
+    {
+        $owner = auth('owner')->user();
+        $inn_id = $request->post('inn_id');
+        $inn_data = $request->only('name',
+            'water_price', 'electric_price',
+            'open_hour', 'open_minute',
+            'close_hour', 'close_minute',
+            'features', 'address',
+            'location', 'status');
+
+        $old_inn = $this->innRepository->find($inn_id);
+
+        // update inn information
+        if ($old_inn) {
+            $location = $inn_data['location'];
+            $new_inn = $this->innRepository->update([
+                'name' => $inn_data['name'],
+                'water_price' => $inn_data['water_price'],
+                'electric_price' => $inn_data['electric_price'],
+                'open_hour' => $inn_data['open_hour'],
+                'open_minute' => $inn_data['open_minute'],
+                'close_hour' => $inn_data['close_hour'],
+                'close_minute' => $inn_data['close_minute'],
+                'address' => $inn_data['address'],
+                'location' => DB::raw("(GeomFromText('POINT($location)'))"),
+                'status' => $inn_data['status'],
+            ], $inn_id);
+            // update inn features
+            $this->updateFeatures($inn_data['features'], $inn_id);
+            $new_images = $request->file('images');
+
+            $old_images = $this->innImageRepository->where([
+                'inn_id' => $inn_id
+            ])->pluck('filename');
+
+
+            foreach ($new_images as $image) {
+                if (!Storage::disk('s3')->exists("/inns/{$inn_id}/{$image->getClientOriginalName()}")) {
+                    $uploadImg = Storage::disk('s3')->put("/inns/{$inn_id}", $image);
+                    $s3FileName = $this->getS3Filename($uploadImg);
+                    $this->innImageRepository->create([
+                        'inn_id' => $inn_id,
+                        'image_url' => Config::get('filesystems.s3_folder_path') . $uploadImg,
+                        'filename' => $s3FileName
+                    ]);
+                }
+            }
+
+
+        }
+
+
+    }
+
+
+    public function updateFeatures($new_features, $inn_id)
+    {
+        $old_features = $this->innFeatureRepository->where('inn_id', $inn_id)->pluck('inn_feature_id')->toArray();
+
+        $diff_new_vs_old = array_diff($new_features, $old_features);
+        $diff_old_vs_new = array_diff($old_features, $new_features);
+
+
+        foreach ($diff_new_vs_old as $value) {
+            //add new features
+            if (!in_array($value, $old_features)) {
+                $this->innFeatureRepository->create([
+                    'inn_id' => $inn_id,
+                    'inn_feature_id' => $value
+                ]);
+            }
+        }
+        foreach ($diff_old_vs_new as $value) {
+            if (!in_array($value, $new_features)) {
+                $feature = $this->innFeatureRepository->where([
+                    'inn_id' => $inn_id,
+                    'inn_feature_id' => $value
+                ])->delete();
+            }
+        }
+    }
+
+    public function updateImages($inn_id)
+    {
+
+
     }
 
 

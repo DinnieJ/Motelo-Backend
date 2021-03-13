@@ -53,6 +53,7 @@ Route::group(['prefix' => 'owner'], function () {
     Route::middleware(['auth.jwt', 'assign.guard:owner'])->group(function () {
         Route::group(['prefix' => 'inn'], function () {
             Route::post('/create', 'Inn\InnController@createNewInn');
+            Route::post('/update','Inn\InnController@updateInn');
             Route::post('/image/upload', 'Inn\InnController@uploadImages');
         });
     });
