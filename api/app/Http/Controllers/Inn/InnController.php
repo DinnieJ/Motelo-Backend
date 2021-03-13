@@ -185,29 +185,24 @@ class InnController extends BaseController
         $diff_new_vs_old = array_diff($new_features, $old_features);
         $diff_old_vs_new = array_diff($old_features, $new_features);
 
-        if (!empty($diff_new_vs_old)) {
-            foreach ($diff_new_vs_old as $value) {
-                //add new features
+        $diff_array = array_merge($diff_old_vs_new, $diff_new_vs_old);
+        if (!empty($diff_array))
+            foreach ($diff_array as $value) {
+                //add features
                 if (!in_array($value, $old_features)) {
                     $this->innFeatureRepository->create([
                         'inn_id' => $inn_id,
                         'inn_feature_id' => $value
                     ]);
                 }
-            }
-        }
-
-        if (!empty($diff_old_vs_new)) {
-            foreach ($diff_old_vs_new as $value) {
+                //delete features
                 if (!in_array($value, $new_features)) {
-                    //delete features
                     $feature = $this->innFeatureRepository->where([
                         'inn_id' => $inn_id,
                         'inn_feature_id' => $value
                     ])->delete();
                 }
             }
-        }
     }
 
     public function updateImages($new_images, $inn_id)
@@ -220,10 +215,11 @@ class InnController extends BaseController
         $diff_new_vs_old = array_diff($new_images, $old_images);
         $diff_old_vs_new = array_diff($old_images, $new_images);
 
+        $diff_array = array_merge($diff_new_vs_old, $diff_old_vs_new);
 
-        //add new images
-        if (!empty($diff_new_vs_old)) {
-            foreach ($diff_new_vs_old as $value) {
+        if (!empty($diff_array))
+            foreach ($diff_array as $value) {
+                //add new images
                 if (!in_array($value, $old_images)) {
                     try {
                         $uploadImg = Storage::disk('s3')->put("/inns/{$inn_id}", $value);
@@ -236,15 +232,8 @@ class InnController extends BaseController
                     } catch (\Exception $e) {
                         return $e->getMessage();
                     }
-
                 }
-            }
-        }
-
-
-        //detele images
-        if (!empty($diff_old_vs_new)) {
-            foreach ($diff_old_vs_new as $value) {
+                //delete images
                 if (!in_array($value, $new_images)) {
                     try {
                         $uploadImg = Storage::disk('s3')->delete("/inns/{$inn_id}/{$value}");
@@ -255,11 +244,8 @@ class InnController extends BaseController
                     } catch (\Exception $e) {
                         return $e->getMessage();
                     }
-
                 }
             }
-        }
-
 
     }
 
