@@ -34,7 +34,6 @@ class CreateInnRequest extends FormRequest
             'open_minute' => 'required|integer',
             'close_hour' => 'required|integer',
             'close_minute' => 'required|integer',
-            'description' => 'required',
             'address' => 'required',
             'location' => 'required'
 
@@ -68,11 +67,10 @@ class CreateInnRequest extends FormRequest
             'close_minute.required' => trans('responses.inn.close_minute.required'),
             'close_minute.integer' => trans('responses.inn.close_minute.integer'),
 
-            'description.required' => trans('responses.inn.description.required'),
 
             'address.required' => trans('responses.inn.address.required'),
 
-            'location.required' => trans('responses.inn.location.required')
+            'location.required' => trans('responses.inn.location.required'),
         ];
     }
 
