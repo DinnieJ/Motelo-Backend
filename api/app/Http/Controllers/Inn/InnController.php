@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Inn;
 
 use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\Inn\CreateInnRequest;
+use App\Http\Requests\Inn\UpdateInnRequest;
 use App\Http\Requests\InnImage\UploadInnImageRequest;
 use App\Http\Resources\InnDetailResource;
 use App\Repositories\Inn\InnRepositoryInterface;
@@ -62,8 +63,7 @@ class InnController extends BaseController
             'water_price', 'electric_price',
             'open_hour', 'open_minute',
             'close_hour', 'close_minute',
-            'features',
-            'description', 'address',
+            'features', 'address',
             'location', 'status');
 
         $location = $inn_data['location'];
@@ -79,7 +79,6 @@ class InnController extends BaseController
                 'open_minute' => $inn_data['open_minute'],
                 'close_hour' => $inn_data['close_hour'],
                 'close_minute' => $inn_data['close_minute'],
-                'description' => $inn_data['description'],
                 'address' => $inn_data['address'],
                 'location' => DB::raw("(GeomFromText('POINT($location)'))"),
                 'status' => $inn_data['status']
@@ -134,7 +133,7 @@ class InnController extends BaseController
     }
 
 
-    public function updateInn(Request $request)
+    public function updateInn(UpdateInnRequest $request)
     {
         $owner = auth('owner')->user();
         $inn_id = $request->post('inn_id');
@@ -185,7 +184,7 @@ class InnController extends BaseController
 
         $diff_new_vs_old = array_diff($new_features, $old_features);
         $diff_old_vs_new = array_diff($old_features, $new_features);
-        
+
         if (!empty($diff_new_vs_old)) {
             foreach ($diff_new_vs_old as $value) {
                 //add new features
