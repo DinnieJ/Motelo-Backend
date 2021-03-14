@@ -12,6 +12,7 @@ use App\Repositories\Inn\InnRepositoryInterface;
 use App\Repositories\InnFeature\InnFeatureRepositoryInterface;
 use App\Repositories\InnImage\InnImageRepositoryInterface;
 use App\Traits\FileHelper;
+use App\Traits\UpdateHelper;
 use Faker\Calculator\Inn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -28,6 +29,7 @@ class InnController extends BaseController
     private $innImageRepository;
 
     use FileHelper;
+    use UpdateHelper;
 
     /**
      * InnController constructor.
@@ -63,10 +65,11 @@ class InnController extends BaseController
             'water_price', 'electric_price',
             'open_hour', 'open_minute',
             'close_hour', 'close_minute',
-            'features', 'address',
-            'location', 'status');
+            'features', 'address', 'location');
 
-        $location = $inn_data['location'];
+        $latitude = $inn_data['location']['lat'];
+        $longitude = $inn_data['location']['lng'];
+        $location_point = $latitude . " " . $longitude;
 
 
         try {
@@ -80,8 +83,8 @@ class InnController extends BaseController
                 'close_hour' => $inn_data['close_hour'],
                 'close_minute' => $inn_data['close_minute'],
                 'address' => $inn_data['address'],
-                'location' => DB::raw("(GeomFromText('POINT($location)'))"),
-                'status' => $inn_data['status']
+                'location' => DB::raw("(GeomFromText('POINT($location_point)'))"),
+                'status' => 1
             ]);
 
 
@@ -141,14 +144,16 @@ class InnController extends BaseController
             'water_price', 'electric_price',
             'open_hour', 'open_minute',
             'close_hour', 'close_minute',
-            'features', 'address',
-            'location', 'status');
+            'features', 'address', 'location');
 
         $old_inn = $this->innRepository->find($inn_id);
 
         // update inn information
         if ($old_inn) {
-            $location = $inn_data['location'];
+            $latitude = $inn_data['location'][0];;
+            $longitude = $inn_data['location'][1];
+            $location_point = $latitude . " " . $longitude;
+
             $new_inn = $this->innRepository->update([
                 'name' => $inn_data['name'],
                 'water_price' => $inn_data['water_price'],
@@ -158,8 +163,8 @@ class InnController extends BaseController
                 'close_hour' => $inn_data['close_hour'],
                 'close_minute' => $inn_data['close_minute'],
                 'address' => $inn_data['address'],
-                'location' => DB::raw("(GeomFromText('POINT($location)'))"),
-                'status' => $inn_data['status'],
+                'location' => DB::raw("(GeomFromText('POINT($location_point)'))"),
+                'status' => 1,
             ], $inn_id);
             // update inn features
             $this->updateFeatures($inn_data['features'], $inn_id);
@@ -174,78 +179,6 @@ class InnController extends BaseController
             'message' => 'Không tìm thấy nhà trọ'
         ], 404);
 
-
-    }
-
-
-    public function updateFeatures($new_features, $inn_id)
-    {
-        $old_features = $this->innFeatureRepository->where('inn_id', $inn_id)->pluck('inn_feature_id')->toArray();
-
-        $diff_new_vs_old = array_diff($new_features, $old_features);
-        $diff_old_vs_new = array_diff($old_features, $new_features);
-
-        $diff_array = array_merge($diff_old_vs_new, $diff_new_vs_old);
-        if (!empty($diff_array))
-            foreach ($diff_array as $value) {
-                //add features
-                if (!in_array($value, $old_features)) {
-                    $this->innFeatureRepository->create([
-                        'inn_id' => $inn_id,
-                        'inn_feature_id' => $value
-                    ]);
-                }
-                //delete features
-                if (!in_array($value, $new_features)) {
-                    $feature = $this->innFeatureRepository->where([
-                        'inn_id' => $inn_id,
-                        'inn_feature_id' => $value
-                    ])->delete();
-                }
-            }
-    }
-
-    public function updateImages($new_images, $inn_id)
-    {
-        $old_images = $this->innImageRepository->where([
-            'inn_id' => $inn_id
-        ])->pluck('filename')->toArray();
-
-
-        $diff_new_vs_old = array_diff($new_images, $old_images);
-        $diff_old_vs_new = array_diff($old_images, $new_images);
-
-        $diff_array = array_merge($diff_new_vs_old, $diff_old_vs_new);
-
-        if (!empty($diff_array))
-            foreach ($diff_array as $value) {
-                //add new images
-                if (!in_array($value, $old_images)) {
-                    try {
-                        $uploadImg = Storage::disk('s3')->put("/inns/{$inn_id}", $value);
-                        $s3FileName = $this->getS3Filename($uploadImg);
-                        $this->innImageRepository->create([
-                            'inn_id' => $inn_id,
-                            'image_url' => Config::get('filesystems.s3_folder_path') . $uploadImg,
-                            'filename' => $s3FileName
-                        ]);
-                    } catch (\Exception $e) {
-                        return $e->getMessage();
-                    }
-                }
-                //delete images
-                if (!in_array($value, $new_images)) {
-                    try {
-                        $uploadImg = Storage::disk('s3')->delete("/inns/{$inn_id}/{$value}");
-                        $this->innImageRepository->where([
-                            'inn_id' => $inn_id,
-                            'filename' => $value
-                        ])->delete();
-                    } catch (\Exception $e) {
-                        return $e->getMessage();
-                    }
-                }
-            }
 
     }
 
