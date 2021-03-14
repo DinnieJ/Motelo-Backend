@@ -33,4 +33,8 @@ class Inn extends Model
         return $this->belongsTo(Owner::class, 'owner_id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(InnImage::class, 'inn_id');
+    }
 }

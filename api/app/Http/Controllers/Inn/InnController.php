@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Inn;
 
-
 use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\Inn\CreateInnRequest;
 use App\Http\Requests\Inn\UpdateInnRequest;
@@ -20,7 +19,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-
 class InnController extends BaseController
 {
     //
@@ -37,10 +35,11 @@ class InnController extends BaseController
      * @param $innFeatureRepository
      * @param $innImageRepository
      */
-    public function __construct(InnRepositoryInterface $innRepository,
-                                InnFeatureRepositoryInterface $innFeatureRepository,
-                                InnImageRepositoryInterface $innImageRepository)
-    {
+    public function __construct(
+        InnRepositoryInterface $innRepository,
+        InnFeatureRepositoryInterface $innFeatureRepository,
+        InnImageRepositoryInterface $innImageRepository
+    ) {
         $this->innRepository = $innRepository;
         $this->innFeatureRepository = $innFeatureRepository;
         $this->innImageRepository = $innImageRepository;
@@ -49,7 +48,6 @@ class InnController extends BaseController
 
     public function getDetailInn(Request $request, $id)
     {
-
         $inn = $this->innRepository->findInnByID($id);
 
         if (!$inn) {
@@ -61,11 +59,18 @@ class InnController extends BaseController
     public function createNewInn(CreateInnRequest $request)
     {
         $owner = auth('owner')->user();
-        $inn_data = $request->only('name',
-            'water_price', 'electric_price',
-            'open_hour', 'open_minute',
-            'close_hour', 'close_minute',
-            'features', 'address', 'location');
+        $inn_data = $request->only(
+            'name',
+            'water_price',
+            'electric_price',
+            'open_hour',
+            'open_minute',
+            'close_hour',
+            'close_minute',
+            'features',
+            'address',
+            'location'
+        );
 
         $latitude = $inn_data['location']['lat'];
         $longitude = $inn_data['location']['lng'];
@@ -90,7 +95,6 @@ class InnController extends BaseController
 
             //insert features into tb_inn_feature
             foreach ($inn_data['features'] ?? [] as $feature) {
-
                 $this->innFeatureRepository->create([
                     'inn_id' => $new_inn->id,
                     'inn_feature_id' => $feature,
@@ -124,8 +128,6 @@ class InnController extends BaseController
                     'image_url' => Config::get('filesystems.s3_folder_path') . $uploadImg,
                     'filename' => $s3FileName
                 ]);
-
-
             } catch (\Exception $exception) {
                 return $exception;
             }
@@ -140,17 +142,25 @@ class InnController extends BaseController
     {
         $owner = auth('owner')->user();
         $inn_id = $request->post('inn_id');
-        $inn_data = $request->only('name',
-            'water_price', 'electric_price',
-            'open_hour', 'open_minute',
-            'close_hour', 'close_minute',
-            'features', 'address', 'location');
+        $inn_data = $request->only(
+            'name',
+            'water_price',
+            'electric_price',
+            'open_hour',
+            'open_minute',
+            'close_hour',
+            'close_minute',
+            'features',
+            'address',
+            'location'
+        );
 
         $old_inn = $this->innRepository->find($inn_id);
 
         // update inn information
         if ($old_inn) {
-            $latitude = $inn_data['location'][0];;
+            $latitude = $inn_data['location'][0];
+            ;
             $longitude = $inn_data['location'][1];
             $location_point = $latitude . " " . $longitude;
 
@@ -173,14 +183,18 @@ class InnController extends BaseController
             return response()->json([
                 'message' => "Cập nhật nhà trọ thành công",
             ], 200);
-
         }
         return response()->json([
             'message' => 'Không tìm thấy nhà trọ'
         ], 404);
-
-
     }
 
+    public function checkInnExists(Request $request)
+    {
+        $inn = auth('owner')->user()->inn;
 
+        return response()->json([
+            'exist' =>  $inn != null
+        ], 200);
+    }
 }
