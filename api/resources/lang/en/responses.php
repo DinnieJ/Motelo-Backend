@@ -110,16 +110,17 @@ return [
             'required' => 'Không để trống phút đóng cửa',
             'integer' => 'Phút đóng cửa phải là số dương',
         ],
-        'description' => [
-            'required' => 'Không được để trống miêu tả nhà'
-        ],
         'address' => [
             'required' => 'Không để trống địa chỉ nhà'
         ],
-        'location'=> [
+        'location' => [
             'required' => 'Không để trống địa chỉ map'
+        ],
+        'features' => [
+            'required' => 'Không để trống tiện ích'
+        ],
+        'images' => [
+            'required' => 'Không để trống ảnh'
         ]
-
-
     ]
 ];

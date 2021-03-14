@@ -5,16 +5,19 @@ namespace App\Http\Controllers\Inn;
 
 use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\Inn\CreateInnRequest;
+use App\Http\Requests\Inn\UpdateInnRequest;
 use App\Http\Requests\InnImage\UploadInnImageRequest;
 use App\Http\Resources\InnDetailResource;
 use App\Repositories\Inn\InnRepositoryInterface;
 use App\Repositories\InnFeature\InnFeatureRepositoryInterface;
 use App\Repositories\InnImage\InnImageRepositoryInterface;
 use App\Traits\FileHelper;
+use App\Traits\UpdateHelper;
 use Faker\Calculator\Inn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -26,6 +29,7 @@ class InnController extends BaseController
     private $innImageRepository;
 
     use FileHelper;
+    use UpdateHelper;
 
     /**
      * InnController constructor.
@@ -61,11 +65,11 @@ class InnController extends BaseController
             'water_price', 'electric_price',
             'open_hour', 'open_minute',
             'close_hour', 'close_minute',
-            'features',
-            'description', 'address',
-            'location', 'status');
+            'features', 'address', 'location');
 
-        $location = $inn_data['location'];
+        $latitude = $inn_data['location']['lat'];
+        $longitude = $inn_data['location']['lng'];
+        $location_point = $latitude . " " . $longitude;
 
 
         try {
@@ -78,10 +82,9 @@ class InnController extends BaseController
                 'open_minute' => $inn_data['open_minute'],
                 'close_hour' => $inn_data['close_hour'],
                 'close_minute' => $inn_data['close_minute'],
-                'description' => $inn_data['description'],
                 'address' => $inn_data['address'],
-                'location' => DB::raw("(GeomFromText('POINT($location)'))"),
-                'status' => $inn_data['status']
+                'location' => DB::raw("(GeomFromText('POINT($location_point)'))"),
+                'status' => 1
             ]);
 
 
@@ -130,6 +133,53 @@ class InnController extends BaseController
         return response()->json([
             'message' => 'Upload ảnh thành công'
         ], 200);
+    }
+
+
+    public function updateInn(UpdateInnRequest $request)
+    {
+        $owner = auth('owner')->user();
+        $inn_id = $request->post('inn_id');
+        $inn_data = $request->only('name',
+            'water_price', 'electric_price',
+            'open_hour', 'open_minute',
+            'close_hour', 'close_minute',
+            'features', 'address', 'location');
+
+        $old_inn = $this->innRepository->find($inn_id);
+
+        // update inn information
+        if ($old_inn) {
+            $latitude = $inn_data['location'][0];;
+            $longitude = $inn_data['location'][1];
+            $location_point = $latitude . " " . $longitude;
+
+            $new_inn = $this->innRepository->update([
+                'name' => $inn_data['name'],
+                'water_price' => $inn_data['water_price'],
+                'electric_price' => $inn_data['electric_price'],
+                'open_hour' => $inn_data['open_hour'],
+                'open_minute' => $inn_data['open_minute'],
+                'close_hour' => $inn_data['close_hour'],
+                'close_minute' => $inn_data['close_minute'],
+                'address' => $inn_data['address'],
+                'location' => DB::raw("(GeomFromText('POINT($location_point)'))"),
+                'status' => 1,
+            ], $inn_id);
+            // update inn features
+            $this->updateFeatures($inn_data['features'], $inn_id);
+            $this->updateImages($request->file('images'), $inn_id);
+
+            return response()->json([
+                'message' => "Cập nhật nhà trọ thành công",
+            ], 200);
+
+        }
+        return response()->json([
+            'message' => 'Không tìm thấy nhà trọ'
+        ], 404);
+
+
     }
 
 

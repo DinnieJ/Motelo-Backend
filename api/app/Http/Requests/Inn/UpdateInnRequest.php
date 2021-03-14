@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CreateInnRequest extends FormRequest
+class UpdateInnRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class CreateInnRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'inn_id' => 'required|integer|exists:tb_inn,id',
             'name' => 'required',
             'water_price' => 'required|numeric|gt:0',
             'electric_price' => 'required|numeric|gt:0',
@@ -35,7 +35,14 @@ class CreateInnRequest extends FormRequest
             'close_hour' => 'required|integer',
             'close_minute' => 'required|integer',
             'address' => 'required',
-            'location' => 'required'
+            'location' => 'required',
+
+
+            'features' => 'required',
+            'features.*' => 'required|integer|exists:mst_feature_type,id',
+
+            'images' => 'required',
+            'images.*' => 'required|mimes:png,jpeg,jpg|max:5000'
 
         ];
     }
@@ -71,6 +78,13 @@ class CreateInnRequest extends FormRequest
             'address.required' => trans('responses.inn.address.required'),
 
             'location.required' => trans('responses.inn.location.required'),
+
+
+            'features.required' => trans('responses.inn.features.required'),
+
+            'images.required' => trans('responses.inn.images.required'),
+
+
         ];
     }
 
