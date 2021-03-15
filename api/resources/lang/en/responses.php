@@ -143,14 +143,6 @@ return [
         'description' => [
             'required' => 'Không để trống miêu tả phòng'
         ],
-        'status' => [
-            'required' => 'Không để trống status',
-            'integer' => 'Status phải là số'
-        ],
-        'available' => [
-            'required' => 'Không để trống tình trạng',
-            'boolean' => 'Tình trạng phòng phải ở trạng thái mở hay đóng'
-        ],
         'gender_type_id' => [
             'required' => 'Không để trống trường giới tính',
             'integer' => 'Giới tính phải là mã số',
@@ -159,6 +151,5 @@ return [
         'images' => [
             'required' => 'Không để trống ảnh'
         ]
-
     ]
 ];

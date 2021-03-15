@@ -32,8 +32,6 @@ class CreateRoomRequest extends FormRequest
             'price' => 'required|numeric',
             'acreage' => 'required|numeric',
             'description' => 'required',
-            'status' => 'required|integer',
-            'available' => 'required|boolean',
             'gender_type_id' => 'required|integer|exists:mst_gender_type,id',
             'images' => 'required',
             'images.*' => 'required|mimes:png,jpeg,jpg|max:5000'
@@ -52,16 +50,10 @@ class CreateRoomRequest extends FormRequest
             'acreage.required' => trans('responses.room.acreage.required'),
             'acreage.numeric' => trans('responses.room.acreage.numeric'),
             'description.required' => trans('responses.room.description.required'),
-            'status.required' => trans('responses.room.status.required'),
-            'status.integer' => trans('responses.room.status.integer'),
-            'available.required' => trans('responses.room.available.required'),
-            'available.boolean' => trans('responses.room.available.boolean'),
             'gender_type_id.required' => trans('responses.room.gender_type_id.required'),
             'gender_type_id.integer' => trans('responses.room.gender_type_id.integer'),
             'gender_type_id.exists' => trans('responses.room.gender_type_id.exists'),
             'images.required' => trans('responses.room.images.required')
-
-
         ];
     }
 
