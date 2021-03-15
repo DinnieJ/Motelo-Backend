@@ -117,15 +117,11 @@ class RoomController extends BaseController
     public function createNewRoom(CreateRoomRequest $request)
     {
 
-        $owner_id = auth('owner')->user()->id;
-        $inn_id = $this->innRepository->where([
-            'owner_id' => $owner_id
-        ])->pluck('id')->first();
-
+        $inn_id = auth('owner')->user()->inn->id;
         $room_data = $request->only('title',
             'room_type_id', 'price',
             'acreage', 'description',
-            'gender_type_id', 'available', 'status');
+            'gender_type_id');
 
         $room_images = $request->file('images');
 
@@ -139,8 +135,8 @@ class RoomController extends BaseController
                 'description' => $room_data['description'],
                 'verified' => 0,
                 'verified_at' => null,
-                'available' => $room_data['available'],
-                'status' => $room_data['status'],
+                'available' => 1,
+                'status' => 1,
                 'gender_type_id' => $room_data['gender_type_id']
             ]);
             //upload img
