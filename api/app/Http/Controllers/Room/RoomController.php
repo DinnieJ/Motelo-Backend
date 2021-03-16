@@ -60,6 +60,16 @@ class RoomController extends BaseController
         return response()->json(null, 404);
     }
 
+    public function getRoomsByOwner(Request $request)
+    {
+        $inn_id = auth('owner')->user()->inn->id;
+        $rooms = $this->roomRepository->getRoomsByOwner($inn_id);
+        if ($rooms) {
+            $rooms = $rooms->toArray();
+            return response()->json(new ListRoomCardResource($rooms), 200);
+        }
+    }
+
     public function getRoomsByQuery(ListRoomRequest $request)
     {
         $data = $this->roomRepository->searchByRequest($request, auth('tenant')->user());
