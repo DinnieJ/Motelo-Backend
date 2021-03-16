@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class InnDetailResource extends JsonResource
+class BasicInnDetail extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -26,7 +26,6 @@ class InnDetailResource extends JsonResource
             'address' => $this->address,
             'location' => $this->latitude . " " . $this->longitude,
             'status' => $this->status,
-            'rooms' => $this->rooms,
             'features' => array_column($this->features->toArray(), 'inn_feature_id'),
             'created_at' => $this->created_at->format('d-m-Y'),
             'updated_at' => $this->updated_at->format('d-m-Y')
