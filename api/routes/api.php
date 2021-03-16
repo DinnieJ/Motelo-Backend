@@ -52,6 +52,7 @@ Route::group(['prefix' => 'owner'], function () {
     Route::get('test', 'TestController@ownerTest')->middleware(['auth.jwt', 'assign.guard:owner']);
     Route::middleware(['auth.jwt', 'assign.guard:owner'])->group(function () {
         Route::group(['prefix' => 'inn'], function () {
+            Route::get('/detail', 'Inn\InnController@getDetailInnByOwner');
             Route::post('/create', 'Inn\InnController@createNewInn');
             Route::post('/update', 'Inn\InnController@updateInn');
             Route::post('/image/upload', 'Inn\InnController@uploadImages');
