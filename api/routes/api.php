@@ -63,6 +63,16 @@ Route::group(['prefix' => 'owner'], function () {
     });
 });
 
+Route::group(['prefix' => 'collaborator'], function () {
+    Route::group(
+        ['prefix' => 'utility',
+                  'middleware' => ['auth.jwt', 'assign.guard:collaborator']],
+        function () {
+        Route::post('create', 'Utility\UtilityController@create');
+    }
+    );
+});
+
 Route::post('upload', 'TestController@uploadFile');
 
 Route::group(['prefix' => 'inn'], function () {
