@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Repositories\UtilityImage\UtilityImageRepositoryInterface;
 use App\Repositories\Utility\UtilityRepositoryInterface;
 use App\Traits\FileHelper;
+use App\Http\Requests\Utility\CreateUtilityRequest;
 use App\Http\Resources\UtilityResource;
 use Storage;
 
@@ -25,7 +26,7 @@ class UtilityController extends Controller
         $this->utilityImageRepository = $utilityImageRepository;
     }
 
-    public function create(Request $request)
+    public function create(CreateUtilityRequest $request)
     {
         $data = $request->only('utility_type_id', 'title', 'description', 'address', 'location');
         $image = $request->file('image') ?? null;
