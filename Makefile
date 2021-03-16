@@ -30,4 +30,3 @@ migrate:
 cache:
 	docker-compose exec api php artisan config:cache
 	docker-compose exec api php artisan cache:clear
-	docker-compose exec composer dump-autoload

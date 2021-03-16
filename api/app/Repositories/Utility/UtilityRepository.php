@@ -11,4 +11,11 @@ class UtilityRepository extends BaseRepository implements UtilityRepositoryInter
     {
         return Utility::class;
     }
+
+    public function getAllUtilities()
+    {
+        $data = $this->with('image')->get();
+        
+        return $data;
+    }
 }
