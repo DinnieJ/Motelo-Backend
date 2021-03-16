@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\Inn\CreateInnRequest;
 use App\Http\Requests\Inn\UpdateInnRequest;
 use App\Http\Requests\InnImage\UploadInnImageRequest;
-use App\Http\Resources\InnDetailForOwnerResource;
+use App\Http\Resources\BasicInnDetail;
 use App\Http\Resources\InnDetailResource;
 use App\Repositories\Inn\InnRepositoryInterface;
 use App\Repositories\InnFeature\InnFeatureRepositoryInterface;
@@ -66,7 +66,7 @@ class InnController extends BaseController
         if (!$inn) {
             return response()->json(null, 404);
         }
-        return response()->json(new InnDetailForOwnerResource($inn), 200);
+        return response()->json(new BasicInnDetail($inn), 200);
 
     }
 
