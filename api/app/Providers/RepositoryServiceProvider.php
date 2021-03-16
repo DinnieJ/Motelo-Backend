@@ -61,6 +61,10 @@ class RepositoryServiceProvider extends ServiceProvider
             [
                 \App\Repositories\InnImage\InnImageRepositoryInterface::class,
                 \App\Repositories\InnImage\InnImageRepository::class
+            ],
+            [
+                \App\Repositories\RoomImage\RoomImageRepositoryInterface::class,
+                \App\Repositories\RoomImage\RoomImageRepository::class
             ]
         ];
 

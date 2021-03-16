@@ -57,6 +57,9 @@ Route::group(['prefix' => 'owner'], function () {
             Route::post('/image/upload', 'Inn\InnController@uploadImages');
             Route::get('/check', 'Inn\InnController@checkInnExists');
         });
+        Route::group(['prefix' => 'room'], function () {
+            Route::post('/create', 'Room\RoomController@createNewRoom');
+        });
     });
 });
 
