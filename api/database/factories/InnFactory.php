@@ -5,8 +5,8 @@
 use App\Model;
 use Faker\Generator as Faker;
 
-
 $factory->define(\App\Models\Inn::class, function (Faker $faker) {
+    $fakeLocation = $faker->latitude . " " . $faker->longitude;
     return [
         //
         'name' => $faker->name,
@@ -17,9 +17,8 @@ $factory->define(\App\Models\Inn::class, function (Faker $faker) {
         'open_minute' => $faker->numberBetween(0, 59),
         'close_hour' => $faker->numberBetween(0, 23),
         'close_minute' => $faker->numberBetween(0, 23),
-        'description' => $faker->text,
         'address' => $faker->address,
-        'location' => null,
-        'status' => $faker->randomDigit
+        'location' => \DB::raw("(GeomFromText('POINT($fakeLocation)'))"),
+        'status' => 1
     ];
 });
