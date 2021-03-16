@@ -32,4 +32,15 @@ class InnRepository extends BaseRepository implements InnRepositoryInterface
             ->where('id', $id)->with($withConditions)->first();
         return $inn;
     }
+
+    public function findInnByOwner($inn_id)
+    {
+        $withConditions = [
+            'features' => function ($query) {
+            }
+        ];
+        $inn = $this->select('*', DB::raw('ST_X(location) AS latitude , ST_Y(location) AS longitude'))
+            ->where('id', $inn_id)->with($withConditions)->first();
+        return $inn;
+    }
 }
