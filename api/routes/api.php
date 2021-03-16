@@ -29,6 +29,11 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('register', 'Auth\OwnerAuthController@register');
         Route::get('user', 'Auth\OwnerAuthController@getAuthUser')->middleware(['auth.jwt', 'assign.guard:owner']);
     });
+
+    Route::group(['prefix' => 'collaborator'], function () {
+        Route::post('login', 'Auth\CollaboratorAuthController@login');
+        Route::post('logout', 'Auth\CollaboratorAuthController@logout')->middleware(['auth.jwt', 'assign.guard:collaborator']);
+    });
 });
 Route::group(['prefix' => 'tenant'], function () {
     Route::get('test', 'TestController@tenantTest')->middleware(['auth.jwt', 'assign.guard:tenant']);

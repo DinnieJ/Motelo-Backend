@@ -47,6 +47,11 @@ return [
         'owner' => [
             'driver' => 'jwt',
             'provider' => 'owner'
+        ],
+
+        'collaborator' => [
+            'driver' => 'jwt',
+            'provider' => 'collaborator'
         ]
     ],
 
@@ -76,6 +81,11 @@ return [
         'owner' => [
             'driver' => 'eloquent',
             'model' => App\Models\Owner::class,
+        ],
+
+        'collaborator' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Collaborator::class,
         ],
 
         'users' => [
