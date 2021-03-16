@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\Inn\CreateInnRequest;
 use App\Http\Requests\Inn\UpdateInnRequest;
 use App\Http\Requests\InnImage\UploadInnImageRequest;
+use App\Http\Resources\InnDetailForOwnerResource;
 use App\Http\Resources\InnDetailResource;
 use App\Repositories\Inn\InnRepositoryInterface;
 use App\Repositories\InnFeature\InnFeatureRepositoryInterface;
@@ -39,7 +40,8 @@ class InnController extends BaseController
         InnRepositoryInterface $innRepository,
         InnFeatureRepositoryInterface $innFeatureRepository,
         InnImageRepositoryInterface $innImageRepository
-    ) {
+    )
+    {
         $this->innRepository = $innRepository;
         $this->innFeatureRepository = $innFeatureRepository;
         $this->innImageRepository = $innImageRepository;
@@ -54,6 +56,18 @@ class InnController extends BaseController
             return response()->json(null, 404);
         }
         return response()->json(new InnDetailResource($inn), 200);
+    }
+
+    public function getDetailInnByOwner(Request $request)
+    {
+        $inn_id = auth('owner')->user()->inn->id;
+
+        $inn = $this->innRepository->findInnByOwner($inn_id);
+        if (!$inn) {
+            return response()->json(null, 404);
+        }
+        return response()->json(new InnDetailForOwnerResource($inn), 200);
+
     }
 
     public function createNewInn(CreateInnRequest $request)
@@ -160,7 +174,6 @@ class InnController extends BaseController
         // update inn information
         if ($old_inn) {
             $latitude = $inn_data['location'][0];
-            ;
             $longitude = $inn_data['location'][1];
             $location_point = $latitude . " " . $longitude;
 
@@ -194,7 +207,7 @@ class InnController extends BaseController
         $inn = auth('owner')->user()->inn;
 
         return response()->json([
-            'exist' =>  $inn != null
+            'exist' => $inn != null
         ], 200);
     }
 }
