@@ -12,6 +12,7 @@ $factory->define(\App\Models\Tenant::class, function (Faker $faker) {
         'email' => $faker->email,
         'password' => bcrypt('abcxyz'),
         'date_of_birth' => $faker->date('Y-m-d'),
+        'phone_number' => $faker->phoneNumber,
         'enabled' => 1,
         'remember_token' => null
     ];
