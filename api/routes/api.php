@@ -65,7 +65,7 @@ Route::group(['prefix' => 'owner'], function () {
         });
         Route::group(['prefix' => 'room'], function () {
             Route::post('/create', 'Room\RoomController@createNewRoom');
-                Route::get('/list', 'Room\RoomController@getRoomsByOwner');
+            Route::get('/list', 'Room\RoomController@getRoomsByOwner');
         });
     });
 });
