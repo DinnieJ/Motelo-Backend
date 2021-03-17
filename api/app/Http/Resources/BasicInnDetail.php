@@ -26,6 +26,7 @@ class BasicInnDetail extends JsonResource
             'address' => $this->address,
             'location' => $this->latitude . " " . $this->longitude,
             'status' => $this->status,
+            'images' => array_column($this->images->toArray(), 'image_url'),
             'features' => array_column($this->features->toArray(), 'inn_feature_id'),
             'created_at' => $this->created_at->format('d-m-Y'),
             'updated_at' => $this->updated_at->format('d-m-Y')
