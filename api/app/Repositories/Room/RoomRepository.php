@@ -141,7 +141,7 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
             ->limit(4)
             ->get()
             ->toArray();
-        
+
         return $latest_rooms;
     }
 
@@ -156,13 +156,13 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
                 })->get();
             }]);
         }
-        
+
         $verifiedRooms = $verifiedRooms->where('verified', 1)
             ->inRandomOrder()
             ->limit(6)
             ->get()
             ->toArray();
-        
+
         return $verifiedRooms;
     }
 
@@ -172,7 +172,7 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
             ->where('tenant_id', $tenant_id)
             ->pluck('room_id')
             ->toArray();
-        
+
         $withConditions = [
             'inn' => function ($query) {
             },
@@ -185,5 +185,13 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 
         $favorites_rooms = $this->with($withConditions)->whereIn('id', $favorites_room_id)->paginate(4);
         return $favorites_rooms;
+    }
+
+    public function getRoomsByOwner($inn_id)
+    {
+        $rooms = $this->with(['inn'])->where([
+            'inn_id' => $inn_id
+        ])->paginate(4);
+        return $rooms;
     }
 }

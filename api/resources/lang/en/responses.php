@@ -122,5 +122,51 @@ return [
         'images' => [
             'required' => 'Không để trống ảnh'
         ]
+    ],
+    'room' => [
+        'title' => [
+            'required' => 'Tên phòng trọ không được để trống'
+        ],
+        'room_type_id' => [
+            'required' => 'Không được để trống loại phòng',
+            'integer' => 'Loại phòng phải được đánh dấu là mã số',
+            'exists' => 'Không tồn tại mã số cho loại phòng này'
+        ],
+        'price' => [
+            'required' => 'Không để trống giá',
+            'numeric' => 'Giá phòng phải là số'
+        ],
+        'acreage' => [
+            'required' => 'Không để trống diện tích',
+            'numeric' => 'Diện tích phòng phải là số'
+        ],
+        'description' => [
+            'required' => 'Không để trống miêu tả phòng'
+        ],
+        'gender_type_id' => [
+            'required' => 'Không để trống trường giới tính',
+            'integer' => 'Giới tính phải là mã số',
+            'exists' => 'Không tồn tại mã số giới tính này'
+        ],
+        'images' => [
+            'required' => 'Không để trống ảnh'
+        ]
+    ],
+
+    'utility' => [
+        'utility_type_id' => [
+            'required' => 'Mã loại tiện ích bị thiếu',
+            'numeric' => 'Mã loại tiện ích phải là số',
+            'exists' => 'Mã loại tiện ích không tồn tại'
+        ],
+        'title' => [
+            'required' => 'Tên tiện ích bị thiếu'
+        ],
+        'description' => [
+            'required' => 'Miêu tả bị thiếu'
+        ],
+        'location' => [
+            'required' => 'Thiếu tọa độ'
+        ]
     ]
 ];

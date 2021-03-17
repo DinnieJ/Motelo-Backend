@@ -29,6 +29,11 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('register', 'Auth\OwnerAuthController@register');
         Route::get('user', 'Auth\OwnerAuthController@getAuthUser')->middleware(['auth.jwt', 'assign.guard:owner']);
     });
+
+    Route::group(['prefix' => 'collaborator'], function () {
+        Route::post('login', 'Auth\CollaboratorAuthController@login');
+        Route::post('logout', 'Auth\CollaboratorAuthController@logout')->middleware(['auth.jwt', 'assign.guard:collaborator']);
+    });
 });
 Route::group(['prefix' => 'tenant'], function () {
     Route::get('test', 'TestController@tenantTest')->middleware(['auth.jwt', 'assign.guard:tenant']);
@@ -52,11 +57,23 @@ Route::group(['prefix' => 'owner'], function () {
     Route::get('test', 'TestController@ownerTest')->middleware(['auth.jwt', 'assign.guard:owner']);
     Route::middleware(['auth.jwt', 'assign.guard:owner'])->group(function () {
         Route::group(['prefix' => 'inn'], function () {
+            Route::get('/detail', 'Inn\InnController@getDetailInnByOwner');
             Route::post('/create', 'Inn\InnController@createNewInn');
             Route::post('/update', 'Inn\InnController@updateInn');
             Route::post('/image/upload', 'Inn\InnController@uploadImages');
             Route::get('/check', 'Inn\InnController@checkInnExists');
         });
+        Route::group(['prefix' => 'room'], function () {
+            Route::post('/create', 'Room\RoomController@createNewRoom');
+            Route::get('/list', 'Room\RoomController@getRoomsByOwner');
+        });
+    });
+});
+
+Route::group(['prefix' => 'collaborator'], function () {
+    Route::group(['prefix' => 'utility'], function () {
+        Route::post('create', 'Utility\UtilityController@create')->middleware(['auth.jwt', 'assign.guard:collaborator']);
+        Route::get('all', 'Utility\UtilityController@getAllUtility');
     });
 });
 

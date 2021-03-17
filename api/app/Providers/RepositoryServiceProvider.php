@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -61,7 +60,19 @@ class RepositoryServiceProvider extends ServiceProvider
             [
                 \App\Repositories\InnImage\InnImageRepositoryInterface::class,
                 \App\Repositories\InnImage\InnImageRepository::class
-            ]
+            ],
+            [
+                \App\Repositories\RoomImage\RoomImageRepositoryInterface::class,
+                \App\Repositories\RoomImage\RoomImageRepository::class
+            ],
+            [
+                \App\Repositories\Utility\UtilityRepositoryInterface::class,
+                \App\Repositories\Utility\UtilityRepository::class
+            ],
+            [
+                \App\Repositories\UtilityImage\UtilityImageRepositoryInterface::class,
+                \App\Repositories\UtilityImage\UtilityImageRepository::class
+            ],
         ];
 
         foreach ($repositories as $repo) {
