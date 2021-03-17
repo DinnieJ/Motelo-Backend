@@ -151,5 +151,22 @@ return [
         'images' => [
             'required' => 'Không để trống ảnh'
         ]
+    ],
+
+    'utility' => [
+        'utility_type_id' => [
+            'required' => 'Mã loại tiện ích bị thiếu',
+            'numeric' => 'Mã loại tiện ích phải là số',
+            'exists' => 'Mã loại tiện ích không tồn tại'
+        ],
+        'title' => [
+            'required' => 'Tên tiện ích bị thiếu'
+        ],
+        'description' => [
+            'required' => 'Miêu tả bị thiếu'
+        ],
+        'location' => [
+            'required' => 'Thiếu tọa độ'
+        ]
     ]
 ];

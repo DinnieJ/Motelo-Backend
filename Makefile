@@ -26,3 +26,7 @@ db:
 	docker-compose exec mysql mysql -uroot -proot
 migrate:
 	docker-compose exec api php artisan migrate
+
+cache:
+	docker-compose exec api php artisan config:cache
+	docker-compose exec api php artisan cache:clear
