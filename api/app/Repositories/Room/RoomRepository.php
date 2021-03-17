@@ -76,6 +76,9 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
             },
             'comments' => function ($query) use ($room_id) {
                 $query->orderBy('created_at', 'DESC')->limit(5);
+            },
+            'images' => function ($query) {
+
             }
         ];
 
