@@ -75,6 +75,10 @@ Route::group(['prefix' => 'collaborator'], function () {
         Route::post('create', 'Utility\UtilityController@create')->middleware(['auth.jwt', 'assign.guard:collaborator']);
         Route::get('all', 'Utility\UtilityController@getAllUtility');
     });
+
+    Route::group(['prefix' => 'room', 'middleware' => ['auth.jwt', 'assign.guard:collaborator']], function () {
+        Route::post('verify', 'Room\VerifyRoomController@verifyRoom');
+    });
 });
 
 Route::post('upload', 'TestController@uploadFile');

@@ -73,6 +73,10 @@ class RepositoryServiceProvider extends ServiceProvider
                 \App\Repositories\UtilityImage\UtilityImageRepositoryInterface::class,
                 \App\Repositories\UtilityImage\UtilityImageRepository::class
             ],
+            [
+                \App\Repositories\RoomConfirmation\RoomConfirmationRepositoryInterface::class,
+                \App\Repositories\RoomConfirmation\RoomConfirmationRepository::class
+            ]
         ];
 
         foreach ($repositories as $repo) {
