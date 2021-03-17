@@ -26,6 +26,9 @@ class InnRepository extends BaseRepository implements InnRepositoryInterface
             },
             'features' => function ($query) {
 
+            },
+            'images' => function ($query) {
+
             }
         ];
         $inn = $this->select('*', DB::raw('ST_X(location) AS latitude , ST_Y(location) AS longitude'))
@@ -37,6 +40,9 @@ class InnRepository extends BaseRepository implements InnRepositoryInterface
     {
         $withConditions = [
             'features' => function ($query) {
+            },
+            'images' => function ($query) {
+
             }
         ];
         $inn = $this->select('*', DB::raw('ST_X(location) AS latitude , ST_Y(location) AS longitude'))
