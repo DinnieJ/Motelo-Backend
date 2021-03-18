@@ -105,7 +105,7 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
             ->pluck('room_id')
             ->toArray();
 
-        $topFavoriteRooms = $this->with(['inn']);
+        $topFavoriteRooms = $this->with(['inn', 'firstImage']);
         if ($tenant) {
             $topFavoriteRooms = $topFavoriteRooms->with(['favorites' => function ($query) use ($tenant) {
                 if ($tenant) {
@@ -125,7 +125,7 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 
     public function findLatestRoom($tenant = null)
     {
-        $latest_rooms = $this->with(['inn']);
+        $latest_rooms = $this->with(['inn', 'firstImage']);
 
         if ($tenant) {
             $latest_rooms = $latest_rooms->with(['favorites' => function ($query) use ($tenant) {
@@ -145,7 +145,7 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 
     public function findVerifiedRoom($tenant = null)
     {
-        $verifiedRooms = $this->with(['inn']);
+        $verifiedRooms = $this->with(['inn', 'firstImage']);
 
         if ($tenant) {
             $verifiedRooms = $verifiedRooms->with(['favorites' => function ($query) use ($tenant) {
@@ -178,6 +178,9 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
                 $query->where([
                     'tenant_id' => $tenant_id,
                 ])->whereIn('room_id', $favorites_room_id);
+            },
+            'firstImage' => function ($query) {
+
             }
         ];
 
@@ -187,7 +190,15 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 
     public function getRoomsByOwner($inn_id)
     {
-        $rooms = $this->with(['inn'])->where([
+        $withConditions = [
+            'firstImage' => function ($query) {
+
+            },
+            'favorites' => function ($query) {
+
+            }
+        ];
+        $rooms = $this->with($withConditions)->where([
             'inn_id' => $inn_id
         ])->paginate(4);
         return $rooms;

@@ -25,7 +25,11 @@ class RoomCardResource extends JsonResource
             'acreage' => $this['acreage'],
             'address' => $this['inn']['address'],
             'inn_name' => $this['inn']['name'],
-            'location' => $location['lat'] . " " . $location['lon'],
+            'location' => [
+                'lat' => $location['lat'],
+                'lng' => $location['lon']
+            ],
+            'image' => $this['first_image']['image_url'],
             'verified' => $this['verified'],
             'available' => $this['available'],
             'favorited' => isset($this['favorites']) && count($this['favorites'])
