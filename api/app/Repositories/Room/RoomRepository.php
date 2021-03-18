@@ -29,10 +29,12 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
         }
         if ($request->filled('keyword')) {
             $keyword = $request->keyword;
-            $query = $query->where('title', 'LIKE', '%' . $keyword . '%')
-                ->orWhereHas('inn', function ($q) use ($keyword) {
-                    $q->where('name', 'LIKE', '%' . $keyword . '%');
-                });
+            $query = $query->where(function ($q) use ($keyword) {
+                $q->where('title', 'LIKE', '%' . $keyword . '%')
+                  ->orWhereHas('inn', function ($q) use ($keyword) {
+                      $q->where('name', 'LIKE', '%' . $keyword . '%');
+                  });
+            });
         }
 
         if ($request->filled('gender')) {
@@ -54,14 +56,17 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 
         if ($request->filled('features')) {
             $featuresData = \explode(',', $request->features);
-            $query = $query->whereHas('inn.features', function ($q) use ($featuresData) {
-                $q->whereIn('inn_feature_id', $featuresData);
-            });
+            foreach ($featuresData as $data) {
+                $query = $query->whereHas('inn.features', function ($q) use ($data) {
+                    $q->where('inn_feature_id', $data);
+                });
+            }
         }
 
         if ($request->filled('verified') && $request->verified) {
             $query = $query->where('verified', 1);
         }
+        //dd($query->toSql());
 
         $data = $query->paginate(4)->withQueryString();
         return $data;
