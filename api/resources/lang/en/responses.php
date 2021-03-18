@@ -124,6 +124,12 @@ return [
         ]
     ],
     'room' => [
+        'id' => [
+            'required' => 'Thiếu id phòng',
+            'exists' => 'ID phòng không tồn tại',
+            'numeric' => 'ID phòng phải là số',
+            'verified' => 'Phòng đã được xác thực'
+        ],
         'title' => [
             'required' => 'Tên phòng trọ không được để trống'
         ],
@@ -168,5 +174,5 @@ return [
         'location' => [
             'required' => 'Thiếu tọa độ'
         ]
-    ]
+    ],
 ];
