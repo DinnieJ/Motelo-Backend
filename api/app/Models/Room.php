@@ -39,4 +39,8 @@ class Room extends Model
     {
         return $this->hasMany(RoomImage::class, 'room_id');
     }
+
+    public function firstImage() {
+        return $this->hasOne(RoomImage::class, 'room_id');
+    }
 }
