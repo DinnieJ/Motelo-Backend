@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\Room\CreateRoomRequest;
+use App\Http\Resources\ListRoomBasic;
 use App\Http\Resources\RoomCardResource;
 use App\Http\Resources\RoomDetailResource;
 use App\Http\Resources\ListRoomCardResource;
@@ -66,7 +67,8 @@ class RoomController extends BaseController
         $rooms = $this->roomRepository->getRoomsByOwner($inn_id);
         if ($rooms) {
             $rooms = $rooms->toArray();
-            return response()->json(new ListRoomCardResource($rooms), 200);
+            return response()->json(new ListRoomBasic($rooms), 200);
+
         }
     }
 
