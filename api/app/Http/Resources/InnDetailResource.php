@@ -22,7 +22,6 @@ class InnDetailResource extends JsonResource
             'electric_price' => $this->electric_price,
             'open_time' => (($this->open_hour) < 10 ? "0" . $this->open_hour : $this->open_hour) . ":" . (($this->open_minute) < 10 ? "0" . $this->open_minute : $this->open_minute),
             'close_time' => (($this->close_hour) < 10 ? "0" . $this->close_hour : $this->close_hour) . ":" . (($this->close_minute) < 10 ? "0" . $this->close_minute : $this->close_minute),
-            'description' => $this->description,
             'address' => $this->address,
             'location' => [
                 'lat' => $this->latitude,
