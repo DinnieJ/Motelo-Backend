@@ -28,6 +28,7 @@ class RoomDetailResource extends JsonResource
             'favorited' => $this['favorited'],
             'gender_type_id' => $this['gender_type_id'],
             'inn_detail' => new InnDetailForRoomResource($this['inn']),
+            'images' => array_column($this['images'], 'image_url'),
             'comments' => $this->getRoomComment(),
             'created_at' => $this['created_at'],
             'updated_at' => $this['updated_at']

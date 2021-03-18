@@ -22,10 +22,13 @@ class BasicInnDetail extends JsonResource
             'electric_price' => $this->electric_price,
             'open_time' => (($this->open_hour) < 10 ? "0" . $this->open_hour : $this->open_hour) . ":" . (($this->open_minute) < 10 ? "0" . $this->open_minute : $this->open_minute),
             'close_time' => (($this->close_hour) < 10 ? "0" . $this->close_hour : $this->close_hour) . ":" . (($this->close_minute) < 10 ? "0" . $this->close_minute : $this->close_minute),
-            'description' => $this->description,
             'address' => $this->address,
-            'location' => $this->latitude . " " . $this->longitude,
+            'location' => [
+                'lat' => $this->latitude,
+                'lng' => $this->longitude
+            ],
             'status' => $this->status,
+            'images' => array_column($this->images->toArray(), 'image_url'),
             'features' => array_column($this->features->toArray(), 'inn_feature_id'),
             'created_at' => $this->created_at->format('d-m-Y'),
             'updated_at' => $this->updated_at->format('d-m-Y')

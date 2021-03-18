@@ -3,9 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\DB;
 
-class RoomCardResource extends JsonResource
+class RoomBasic extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,7 +14,7 @@ class RoomCardResource extends JsonResource
      */
     public function toArray($request)
     {
-        $location = unpack('x/x/x/x/corder/Ltype/dlat/dlon', $this['inn']['location']);
+
         return [
             'id' => $this['id'],
             'name' => $this['title'],
@@ -23,16 +22,12 @@ class RoomCardResource extends JsonResource
             'gender' => $this['gender_type_id'],
             'price' => $this['price'],
             'acreage' => $this['acreage'],
-            'address' => $this['inn']['address'],
-            'inn_name' => $this['inn']['name'],
-            'location' => [
-                'lat' => $location['lat'],
-                'lng' => $location['lon']
-            ],
             'image' => $this['first_image']['image_url'],
             'verified' => $this['verified'],
             'available' => $this['available'],
-            'favorited' => isset($this['favorites']) && count($this['favorites'])
+            'num_favorited' => count($this['favorites']),
+            'created_at' => $this['created_at'],
+            'updated_at' => $this['updated_at']
         ];
     }
 }

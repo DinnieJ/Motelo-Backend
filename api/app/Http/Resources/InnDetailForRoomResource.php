@@ -14,6 +14,7 @@ class InnDetailForRoomResource extends JsonResource
      */
     public function toArray($request)
     {
+        $location = unpack('x/x/x/x/corder/Ltype/dlat/dlon', $this['location']);
         return [
             'id' => $this['id'],
             'address' => $this['address'],
@@ -25,6 +26,10 @@ class InnDetailForRoomResource extends JsonResource
             'electric_price' => $this['electric_price'],
             'open_time' => (($this['open_hour']) < 10 ? "0" . $this['open_hour'] : $this['open_hour']) . ":" . (($this['open_minute']) < 10 ? "0" . $this['open_minute'] : $this['open_minute']),
             'close_time' => (($this['close_hour']) < 10 ? "0" . $this['close_hour'] : $this['close_hour']) . ":" . (($this['close_minute']) < 10 ? "0" . $this['close_minute'] : $this['close_minute']),
+            'location' => [
+                'lat' => $location['lat'],
+                'lng' => $location['lon']
+            ],
             'features' => array_column($this['features'], 'inn_feature_id')
         ];
     }
