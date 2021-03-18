@@ -24,7 +24,10 @@ class InnDetailResource extends JsonResource
             'close_time' => (($this->close_hour) < 10 ? "0" . $this->close_hour : $this->close_hour) . ":" . (($this->close_minute) < 10 ? "0" . $this->close_minute : $this->close_minute),
             'description' => $this->description,
             'address' => $this->address,
-            'location' => $this->latitude . " " . $this->longitude,
+            'location' => [
+                'lat' => $this->latitude,
+                'lng' => $this->longitude
+            ],
             'status' => $this->status,
             'rooms' => $this->rooms,
             'images' => array_column($this->images->toArray(), 'image_url'),
