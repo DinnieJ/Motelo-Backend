@@ -32,5 +32,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RoomCommentTableSeeder::class);
 
         $this->call(CollaboratorSeeder::class);
+        $this->call(MstUtilityTypeSeeder::class);
     }
 }
