@@ -33,6 +33,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::group(['prefix' => 'collaborator'], function () {
         Route::post('login', 'Auth\CollaboratorAuthController@login');
         Route::post('logout', 'Auth\CollaboratorAuthController@logout')->middleware(['auth.jwt', 'assign.guard:collaborator']);
+        Route::get('user', 'Auth\CollaboratorAuthController@getAuthUser')->middleware(['auth.jwt', 'assign.guard:collaborator']);
     });
 });
 Route::group(['prefix' => 'tenant'], function () {

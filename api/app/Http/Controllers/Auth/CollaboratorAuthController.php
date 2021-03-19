@@ -56,4 +56,9 @@ class CollaboratorAuthController extends BaseController
             ], 502);
         }
     }
+
+    public function getAuthUser(Request $request)
+    {
+        return response()->json(auth('collaborator')->user(), 200);
+    }
 }
