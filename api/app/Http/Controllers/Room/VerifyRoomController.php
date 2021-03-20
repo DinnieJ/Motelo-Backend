@@ -25,7 +25,6 @@ class VerifyRoomController extends Controller
 
     public function verifyRoom(VerifyRoomRequest $request)
     {
-        dd('passed');
         $room_id = $request->room_id;
         $collaborator_id = auth('collaborator')->user()->id;
 
