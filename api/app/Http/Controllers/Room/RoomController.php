@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\Room\CreateRoomRequest;
+use App\Http\Requests\Room\UpdateRoomRequest;
 use App\Http\Resources\ListRoomBasic;
 use App\Http\Resources\RoomCardResource;
 use App\Http\Resources\RoomDetailResource;
@@ -163,6 +164,41 @@ class RoomController extends BaseController
 
             ]);
         }
+    }
+
+    public function updateRoom(UpdateRoomRequest $request)
+    {
+        $room_id = $request->post('room_id');
+
+        $old_room = $this->roomRepository->find($room_id);
+        if ($old_room) {
+            $data = $request->only(
+                'title', 'room_type_id',
+                'price', 'acreage',
+                'description', 'gender_type_id', 'available'
+            );
+            $images = $request->file('images');
+
+            $update_room = $this->roomRepository->update([
+                'title' => $data['title'],
+                'room_type_id' => $data['room_type_id'],
+                'price' => $data['price'],
+                'acreage' => $data['acreage'],
+                'description' => $data['description'],
+                'gender_type_id' => $data['gender_type_id'],
+                'available' => $data['available']
+            ], $room_id);
+
+            //update images
+            $this->updateRoomImages($images, $room_id);
+
+            return response()->json([
+                'message' => 'Cập nhật phòng thành công'
+            ], 200);
+        }
+        return response()->json([
+            'message' => null
+        ], 404);
     }
 
 }
