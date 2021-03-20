@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\Room\CreateRoomRequest;
+use App\Http\Requests\Room\DeleteRoomRequest;
 use App\Http\Requests\Room\UpdateRoomRequest;
 use App\Http\Resources\ListRoomBasic;
 use App\Http\Resources\RoomCardResource;
@@ -199,6 +200,23 @@ class RoomController extends BaseController
         return response()->json([
             'message' => null
         ], 404);
+    }
+
+    public function deleteRoom(DeleteRoomRequest $request)
+    {
+        $inn_id = auth('owner')->user()->inn->id;
+        $room_id = $request->post('room_id');
+        $exist_room = $this->roomRepository->where([
+            'inn_id' => $inn_id,
+            'id' => $room_id
+        ]);
+        if ($exist_room) {
+            $exist_room->delete();
+            return response()->json([
+                'message' => 'Xóa phòng thành công'
+            ], 200);
+        }
+        return response()->json(null, 404);
     }
 
 }
