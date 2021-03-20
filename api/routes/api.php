@@ -67,6 +67,7 @@ Route::group(['prefix' => 'owner'], function () {
         Route::group(['prefix' => 'room'], function () {
             Route::post('/create', 'Room\RoomController@createNewRoom');
             Route::post('/update', 'Room\RoomController@updateRoom');
+            Route::post('/delete', 'Room\RoomController@deleteRoom');
             Route::get('/list', 'Room\RoomController@getRoomsByOwner');
         });
     });
