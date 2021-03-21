@@ -2,10 +2,13 @@
 
 namespace App\Http\Resources;
 
+use App\Traits\ImageHelper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BasicInnDetail extends JsonResource
+class   BasicInnDetail extends JsonResource
 {
+    use ImageHelper;
+
     /**
      * Transform the resource into an array.
      *
@@ -28,7 +31,7 @@ class BasicInnDetail extends JsonResource
                 'lng' => $this->longitude
             ],
             'status' => $this->status,
-            'images' => array_column($this->images->toArray(), 'image_url'),
+            'images' => $this->getImages($this->images->toArray()),
             'features' => array_column($this->features->toArray(), 'inn_feature_id'),
             'created_at' => $this->created_at->format('d-m-Y'),
             'updated_at' => $this->updated_at->format('d-m-Y')
