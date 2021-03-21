@@ -84,6 +84,15 @@ Route::group(['prefix' => 'collaborator'], function () {
     });
 });
 
+Route::group(['prefix' => 'admin'], function () {
+    Route::group(['prefix' => 'collaborator'], function () {
+        Route::get('all', 'Collaborator\CollaboratorController@all');
+        Route::post('create', 'Collaborator\CollaboratorController@create');
+        Route::post('edit/{id}', 'Collaborator\CollaboratorController@edit');
+        Route::post('delete/{id}', 'Collaborator\CollaboratorController@delete');
+    });
+});
+
 Route::post('upload', 'TestController@uploadFile');
 
 Route::group(['prefix' => 'inn'], function () {

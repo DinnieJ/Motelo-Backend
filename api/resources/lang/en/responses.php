@@ -29,6 +29,14 @@ return [
         'contact' => [
             'required' => 'Không để trống liên lạc',
             'min' => 'Cần có tối thiểu :min thông tin liên lạc'
+        ],
+
+        'phone_number' => [
+            'required' => 'Thiếu số điện thoại'
+        ],
+
+        'identity_number' => [
+            'required' => 'Thiếu số chứng minh thư nhân dân'
         ]
     ],
     'tenant_comment' => [
