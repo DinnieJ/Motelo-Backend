@@ -3,9 +3,12 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Traits\ImageHelper;
 
 class InnDetailResource extends JsonResource
 {
+    use ImageHelper;
+
     /**
      * Transform the resource into an array.
      *
@@ -29,7 +32,7 @@ class InnDetailResource extends JsonResource
             ],
             'status' => $this->status,
             'rooms' => $this->rooms,
-            'images' => array_column($this->images->toArray(), 'image_url'),
+            'images' => $this->getImages($this->images->toArray()),
             'features' => array_column($this->features->toArray(), 'inn_feature_id'),
             'created_at' => $this->created_at->format('d-m-Y'),
             'updated_at' => $this->updated_at->format('d-m-Y')
