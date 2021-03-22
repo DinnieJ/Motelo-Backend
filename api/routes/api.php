@@ -77,6 +77,9 @@ Route::group(['prefix' => 'collaborator'], function () {
     Route::group(['prefix' => 'utility'], function () {
         Route::post('create', 'Utility\UtilityController@create')->middleware(['auth.jwt', 'assign.guard:collaborator']);
         Route::get('all', 'Utility\UtilityController@getAllUtility');
+        Route::post('edit/{id}', 'Utility\UtilityController@edit');
+        Route::post('delete/{id}', 'Utility\UtilityController@delete');
+        Route::get('detail/{id}', 'Utility\UtilityController@detail');
     });
 
     Route::group(['prefix' => 'room', 'middleware' => ['auth.jwt', 'assign.guard:collaborator']], function () {

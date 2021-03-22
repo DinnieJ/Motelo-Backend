@@ -18,4 +18,13 @@ class UtilityRepository extends BaseRepository implements UtilityRepositoryInter
         
         return $data;
     }
+
+    public function getUtility($id)
+    {
+        $data = $this->with(['image'])->where([
+            'id' => $id
+        ])->first();
+
+        return $data;
+    }
 }

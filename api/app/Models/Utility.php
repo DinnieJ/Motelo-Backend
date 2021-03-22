@@ -16,4 +16,9 @@ class Utility extends Model
     {
         return $this->hasOne(UtilityImage::class, 'utility_id');
     }
+
+    public function roomId()
+    {
+        return $this->belongsTo(Room::class, 'room_id');
+    }
 }
