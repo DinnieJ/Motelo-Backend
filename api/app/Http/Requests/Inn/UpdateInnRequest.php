@@ -36,14 +36,10 @@ class UpdateInnRequest extends FormRequest
             'close_minute' => 'required|integer',
             'address' => 'required',
             'location' => 'required',
-
-
             'features' => 'required',
             'features.*' => 'required|integer|exists:mst_feature_type,id',
-
-            'images' => 'required',
-            'images.*' => 'required|mimes:png,jpeg,jpg|max:5000'
-
+            'new_images.*' => 'mimes:png,jpeg,jpg|max:5000',
+            'delete_images.*' => 'integer|exists:tb_inn_image,id'
         ];
     }
 
@@ -81,10 +77,6 @@ class UpdateInnRequest extends FormRequest
 
 
             'features.required' => trans('responses.inn.features.required'),
-
-            'images.required' => trans('responses.inn.images.required'),
-
-
         ];
     }
 
