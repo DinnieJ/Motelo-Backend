@@ -176,22 +176,22 @@ class RoomController extends BaseController
             $data = $request->only(
                 'title', 'room_type_id',
                 'price', 'acreage',
-                'description', 'gender_type_id', 'available'
+                'description', 'gender_type_id', 'available', 'new_images', 'delete_images'
             );
-            $images = $request->file('images');
 
-            $update_room = $this->roomRepository->update([
-                'title' => $data['title'],
-                'room_type_id' => $data['room_type_id'],
-                'price' => $data['price'],
-                'acreage' => $data['acreage'],
-                'description' => $data['description'],
-                'gender_type_id' => $data['gender_type_id'],
-                'available' => $data['available']
-            ], $room_id);
+            $new_images = $data['new_images'] ?? null;
+            $image_ids = $data['delete_images'] ?? null;
+
+            $update_room = $this->roomRepository->update($data, $room_id);
 
             //update images
-            $this->updateRoomImages($images, $room_id);
+            if ($new_images) {
+                $this->uploadRoomImages($new_images, $room_id);
+            }
+            if ($image_ids) {
+                $this->deleteRoomImages($image_ids, $room_id);
+            }
+
 
             return response()->json([
                 'message' => 'Cập nhật phòng thành công'

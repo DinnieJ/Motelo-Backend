@@ -166,7 +166,9 @@ class InnController extends BaseController
             'close_minute',
             'features',
             'address',
-            'location'
+            'location',
+            'new_images',
+            'delete_images'
         );
 
         $old_inn = $this->innRepository->find($inn_id);
@@ -191,7 +193,19 @@ class InnController extends BaseController
             ], $inn_id);
             // update inn features
             $this->updateFeatures($inn_data['features'], $inn_id);
-            $this->updateImages($request->file('images'), $inn_id);
+
+            // update images
+            $new_images = $inn_data['new_images'] ?? null;
+            $image_ids = $inn_data['delete_images'] ?? null;
+
+            if ($new_images) {
+                //
+                $this->uploadInnImages($new_images, $inn_id);
+            }
+            if ($image_ids) {
+                $this->deleteInnImages($image_ids, $inn_id);
+            }
+
 
             return response()->json([
                 'message' => "Cập nhật nhà trọ thành công",

@@ -34,8 +34,8 @@ class UpdateRoomRequest extends FormRequest
             'acreage' => 'required|numeric',
             'description' => 'required',
             'gender_type_id' => 'required|integer|exists:mst_gender_type,id',
-            'images' => 'required',
-            'images.*' => 'required|mimes:png,jpeg,jpg|max:5000'
+            'new_images.*' => 'mimes:png,jpeg,jpg|max:5000',
+            'delete_images.*' => 'integer|exists:tb_room_image,id'
         ];
     }
 
@@ -58,9 +58,6 @@ class UpdateRoomRequest extends FormRequest
             'gender_type_id.required' => trans('responses.room.gender_type_id.required'),
             'gender_type_id.integer' => trans('responses.room.gender_type_id.integer'),
             'gender_type_id.exists' => trans('responses.room.gender_type_id.exists'),
-            'images.required' => trans('responses.room.images.required')
-
-
         ];
     }
 
