@@ -76,6 +76,10 @@ class RepositoryServiceProvider extends ServiceProvider
             [
                 \App\Repositories\RoomConfirmation\RoomConfirmationRepositoryInterface::class,
                 \App\Repositories\RoomConfirmation\RoomConfirmationRepository::class
+            ],
+            [
+                \App\Repositories\Collaborator\CollaboratorRepositoryInterface::class,
+                \App\Repositories\Collaborator\CollaboratorRepository::class
             ]
         ];
 

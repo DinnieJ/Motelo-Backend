@@ -25,9 +25,8 @@ class CollaboratorAuthController extends BaseController
                 ], 406);
             }
         } catch (\Exception $e) {
-            dd($e);
             return response()->json([
-                
+                'message' => 'Failed'
             ], 502);
         }
         $user = auth('collaborator')->user();
