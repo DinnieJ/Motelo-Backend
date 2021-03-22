@@ -72,4 +72,92 @@ class UtilityController extends Controller
 
         return response()->json($responseData, 200);
     }
+
+    public function edit(Request $request, $id)
+    {
+        $data = $request->except('image', 'location');
+        $image = $request->file('image') ?? null;
+        $location = $request->location && count($request->location) == 2 ? $request->location[0] . " " . $request->location[1] : null;
+
+        $location = $location ? \DB::raw("ST_GeomFromText('POINT($location)')") : null;
+        
+        try {
+            $utility = $this->utilityRepository->getUtility($id);
+
+            if (!$utility) {
+                throw new \Exception('Khong tim thay tien ich');
+            }
+
+            foreach ($data as $key => $value) {
+                $utility->{$key} = $value;
+            }
+            if ($location) {
+                $utility->location = $location;
+            }
+            
+            $utility->save();
+
+            if ($image) {
+                $oldImg = $utility->image;
+                
+                if ($oldImg) {
+                    $deleteImg = \Storage::disk('s3')->delete("/utilities/$utility->id/$oldImg->filename");
+                    
+                    $uploadImg = \Storage::disk('s3')->put("utilities/$utility->id", $image);
+
+                    $s3FileName = $this->getS3Filename($uploadImg);
+                    $this->utilityImageRepository->update([
+                        'filename' => $s3FileName,
+                        'image_url' => \Config::get('filesystems.s3_folder_path') . $uploadImg
+                    ], $oldImg->id);
+                } else {
+                    $uploadImg = \Storage::disk('s3')->put("utilities/$utility->id", $image);
+
+                    $s3FileName = $this->getS3Filename($uploadImg);
+
+                    $this->utilityImageRepository->create([
+                        'utility_id' => $utility->id,
+                        'filename' => $s3FileName,
+                        'image_url' => \Config::get('filesystems.s3_folder_path') . $uploadImg
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            'message' => 'Thay doi thong tin thanh cong'
+        ], 200);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $utility = $this->utilityRepository->find($id);
+
+        if ($utility) {
+            try {
+                $utility->delete();
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => $e->getMessage()
+                ], 500);
+            }
+        }
+
+        return response()->json([
+            'message' => 'Xoa tien ich thanh cong'
+        ], 200);
+    }
+
+    public function detail($id)
+    {
+        $data = $this->utilityRepository->getUtility($id);
+        if ($data) {
+            return response()->json(new UtilityResource($data), 200);
+        }
+        return response()->json(null, 404);
+    }
 }
