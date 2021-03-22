@@ -37,47 +37,33 @@ trait UpdateHelper
             }
     }
 
-    public function updateImages($new_images, $inn_id)
+    public function uploadInnImages($new_images, $inn_id)
     {
-        $old_images = $this->innImageRepository->where([
-            'inn_id' => $inn_id
-        ])->pluck('filename')->toArray();
-
-
-        $diff_new_vs_old = array_diff($new_images, $old_images);
-        $diff_old_vs_new = array_diff($old_images, $new_images);
-
-
-        $diff_array = array_merge($diff_new_vs_old, $diff_old_vs_new);
-        if (!empty($diff_array))
-            foreach ($diff_array as $value) {
-                //add new images
-                if (!in_array($value, $old_images)) {
-                    try {
-                        $uploadImg = Storage::disk('s3')->put("/inns/{$inn_id}", $value);
-                        $s3FileName = $this->getS3Filename($uploadImg);
-                        $this->innImageRepository->create([
-                            'inn_id' => $inn_id,
-                            'image_url' => Config::get('filesystems.s3_folder_path') . $uploadImg,
-                            'filename' => $s3FileName
-                        ]);
-                    } catch (\Exception $e) {
-                        return $e->getMessage();
-                    }
-                }
-                //delete images
-                if (!in_array($value, $new_images)) {
-                    try {
-                        $uploadImg = Storage::disk('s3')->delete("/inns/{$inn_id}/{$value}");
-                        $this->innImageRepository->where([
-                            'inn_id' => $inn_id,
-                            'filename' => $value
-                        ])->delete();
-                    } catch (\Exception $e) {
-                        return $e->getMessage();
-                    }
-                }
+        foreach ($new_images as $image) {
+            try {
+                $uploadImg = Storage::disk('s3')->put("/inns/{$inn_id}", $image);
+                $s3FileName = $this->getS3Filename($uploadImg);
+                $this->innImageRepository->create([
+                    'inn_id' => $inn_id,
+                    'image_url' => Config::get('filesystems.s3_folder_path') . $uploadImg,
+                    'filename' => $s3FileName
+                ]);
+            } catch (\Exception $exception) {
+                return $exception->getMessage();
             }
+        }
+    }
 
+    public function deleteInnImages($image_ids, $inn_id)
+    {
+        foreach ($image_ids as $id) {
+            try {
+                $image = $this->innImageRepository->where('id', $id);
+                Storage::disk('s3')->delete("/inns/{$inn_id}/{$image->get()->pluck('filename')->first()}");
+                $image->delete();
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        }
     }
 }
