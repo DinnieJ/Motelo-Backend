@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Traits\ImageHelper;
 
 class RoomDetailResource extends JsonResource
 {
@@ -12,6 +13,8 @@ class RoomDetailResource extends JsonResource
      * @param \Illuminate\Http\Request $request
      * @return array
      */
+    use ImageHelper;
+
     public function toArray($request)
     {
         return [
@@ -28,7 +31,7 @@ class RoomDetailResource extends JsonResource
             'favorited' => $this['favorited'],
             'gender_type_id' => $this['gender_type_id'],
             'inn_detail' => new InnDetailForRoomResource($this['inn']),
-            'images' => array_column($this['images'], 'image_url'),
+            'images' => $this->getImages($this['images']),
             'comments' => $this->getRoomComment(),
             'created_at' => $this['created_at'],
             'updated_at' => $this['updated_at']
@@ -43,4 +46,6 @@ class RoomDetailResource extends JsonResource
 
         return $data;
     }
+
 }
+
