@@ -18,7 +18,7 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 
     public function searchByRequest($request, $tenant = null)
     {
-        $query = $this->with(['inn', 'inn.owner', 'inn.features']);
+        $query = $this->with(['inn', 'inn.owner', 'inn.features', 'first_image']);
 
         if ($tenant) {
             $query = $query->with(['favorites' => function ($query) use ($tenant) {
@@ -83,7 +83,6 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
                 $query->orderBy('created_at', 'DESC')->limit(5);
             },
             'images' => function ($query) {
-
             }
         ];
 
@@ -185,7 +184,6 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
                 ])->whereIn('room_id', $favorites_room_id);
             },
             'firstImage' => function ($query) {
-
             }
         ];
 
@@ -197,10 +195,8 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
     {
         $withConditions = [
             'firstImage' => function ($query) {
-
             },
             'favorites' => function ($query) {
-
             }
         ];
         $rooms = $this->with($withConditions)->where([

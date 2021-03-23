@@ -3,13 +3,11 @@
 
 namespace App\Traits;
 
-
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 
 trait RoomHelper
 {
-
     public function uploadRoomImages($images, $room_id)
     {
         foreach ($images as $img) {
