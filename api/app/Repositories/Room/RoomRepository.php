@@ -18,7 +18,7 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 
     public function searchByRequest($request, $tenant = null)
     {
-        $query = $this->with(['inn', 'inn.owner', 'inn.features', 'first_image']);
+        $query = $this->with(['inn', 'inn.owner', 'inn.features', 'firstImage']);
 
         if ($tenant) {
             $query = $query->with(['favorites' => function ($query) use ($tenant) {
