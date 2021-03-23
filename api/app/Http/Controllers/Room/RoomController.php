@@ -132,10 +132,9 @@ class RoomController extends BaseController
     {
 
         $inn_id = auth('owner')->user()->inn->id;
-        $room_data = $request->only('title',
-            'room_type_id', 'price',
-            'acreage', 'description',
-            'gender_type_id');
+        $room_data = $request->except('description');
+        $room_description = $request->post('description') ?? null;
+
 
         $room_images = $request->file('images');
 
@@ -146,7 +145,7 @@ class RoomController extends BaseController
                 'room_type_id' => $room_data['room_type_id'],
                 'price' => $room_data['price'],
                 'acreage' => $room_data['acreage'],
-                'description' => $room_data['description'],
+                'description' => $room_description,
                 'verified' => 0,
                 'verified_at' => null,
                 'available' => 1,
@@ -162,8 +161,7 @@ class RoomController extends BaseController
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
-
-            ]);
+            ], 500);
         }
     }
 
@@ -172,34 +170,42 @@ class RoomController extends BaseController
         $room_id = $request->post('room_id');
 
         $old_room = $this->roomRepository->find($room_id);
-        if ($old_room) {
-            $data = $request->only(
-                'title', 'room_type_id',
-                'price', 'acreage',
-                'description', 'gender_type_id', 'available', 'new_images', 'delete_images'
-            );
 
-            $new_images = $data['new_images'] ?? null;
-            $image_ids = $data['delete_images'] ?? null;
+        try {
+            if ($old_room) {
+                $data = $request->except('description');
+                $room_description = $request->post('description');
+                $data['description'] = isset($room_description) ? $room_description : null;
 
-            $update_room = $this->roomRepository->update($data, $room_id);
+                $new_images = $data['new_images'] ?? null;
+                $image_ids = $data['delete_images'] ?? null;
 
-            //update images
-            if ($new_images) {
-                $this->uploadRoomImages($new_images, $room_id);
+                $update_room = $this->roomRepository->update($data, $room_id);
+
+                //update images
+                if ($new_images) {
+                    $this->uploadRoomImages($new_images, $room_id);
+                }
+                if ($image_ids) {
+                    $this->deleteRoomImages($image_ids, $room_id);
+                }
+
+                return response()->json([
+                    'message' => 'Cập nhật phòng thành công'
+                ], 200);
             }
-            if ($image_ids) {
-                $this->deleteRoomImages($image_ids, $room_id);
-            }
-
 
             return response()->json([
-                'message' => 'Cập nhật phòng thành công'
-            ], 200);
+                'message' => null
+            ], 404);
+
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
         }
-        return response()->json([
-            'message' => null
-        ], 404);
+
     }
 
     public function deleteRoom(DeleteRoomRequest $request)
