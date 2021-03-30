@@ -30,6 +30,7 @@ class CreateInnRequest extends FormRequest
             'name' => 'required',
             'water_price' => 'required|numeric|gt:0',
             'electric_price' => 'required|numeric|gt:0',
+            'wifi_price' => 'required|numeric|gt:0',
             'open_hour' => 'required|integer',
             'open_minute' => 'required|integer',
             'close_hour' => 'required|integer',
@@ -54,6 +55,9 @@ class CreateInnRequest extends FormRequest
             'electric_price.numeric' => trans('responses.inn.electric_price.numeric'),
             'electric_price.gt' => trans('responses.inn.electric_price.gt'),
 
+            'wifi_price.required' => trans('responses.inn.wifi_price.required'),
+            'wifi_price.numeric' => trans('responses.inn.wifi_price.numeric'),
+            'wifi_price.gt' => trans('responses.inn.wifi_price.gt'),
 
             'open_hour.required' => trans('responses.inn.open_hour.required'),
             'open_hour.integer' => trans('responses.inn.open_hour.integer'),
