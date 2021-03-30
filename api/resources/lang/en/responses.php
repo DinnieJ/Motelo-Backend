@@ -102,6 +102,11 @@ return [
             'numeric' => 'Giá điện phải là số',
             'gt' => 'Giá điện phải là số dương'
         ],
+        'wifi_price' => [
+            'required' => 'Không để trống giá Wifi',
+            'numeric' => 'Giá Wifi phải là số',
+            'gt' => 'Giá Wifi phải là số dương'
+        ],
         'open_hour' => [
             'required' => 'Không để trống giờ mở cửa',
             'integer' => 'Giờ mở cửa phải là số dương',
