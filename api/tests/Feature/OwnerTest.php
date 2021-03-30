@@ -6,8 +6,10 @@ use App\Models\Owner;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 use Tymon\JWTAuth\JWTAuth;
+use Faker\Generator as Faker;
 
 class OwnerTest extends TestCase
 {
@@ -111,9 +113,9 @@ class OwnerTest extends TestCase
             'email' => 'mainn@gmail.com',
             'password' => 'mainn12345'
         ]);
-        $filepath = 'C:\Users\HIEU\Documents\hard-work\Study\Spring 2021\Capstone\data test';
+        $filepath = Config::get('filesystems.image_path');
         $data = [
-            'title' => 'Phòng trọ nhỏ 2 giường - Nhà trọ Mai Ngọc',
+            'title' => 'Phòng trọ nhỏ đang test ảnh',
             'room_type_id' => 1,
             'price' => 3000000,
             'acreage' => 30,
