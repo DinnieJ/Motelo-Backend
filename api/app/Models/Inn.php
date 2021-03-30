@@ -15,7 +15,7 @@ class Inn extends Model
     ];
 
     protected $fillable = [
-        'name', 'owner_id', 'water_price', 'electric_price', 'open_hour', 'open_minute', 'close_hour', 'close_minute', 'description', 'address', 'location', 'status'
+        'name', 'owner_id', 'water_price', 'electric_price', 'wifi_price', 'open_hour', 'open_minute', 'close_hour', 'close_minute', 'description', 'address', 'location', 'status'
     ];
 
     public function rooms()
