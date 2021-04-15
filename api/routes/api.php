@@ -28,6 +28,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('logout', 'Auth\OwnerAuthController@logout')->middleware(['auth.jwt', 'assign.guard:owner']);
         Route::post('register', 'Auth\OwnerAuthController@register');
         Route::get('user', 'Auth\OwnerAuthController@getAuthUser')->middleware(['auth.jwt', 'assign.guard:owner']);
+        Route::post('edit', 'Auth\OwnerAuthController@update');
     });
 
     Route::group(['prefix' => 'collaborator'], function () {
@@ -82,6 +83,14 @@ Route::group(['prefix' => 'collaborator'], function () {
         Route::get('detail/{id}', 'Utility\UtilityController@detail');
     });
 
+    Route::group(['prefix' => 'banner', 'middleware' => ['auth.jwt', 'assign.guard:collaborator']], function () {
+        Route::post('create', 'Collaborator\BannerPostController@store');
+        Route::post('update/{id}', 'Collaborator\BannerPostController@update');
+        Route::get('detail/{id}', 'Collaborator\BannerPostController@get');
+        Route::get('all', 'Collaborator\BannerPostController@all');
+        Route::post('delete/{id}', 'Collaborator\BannerPostController@delete');
+    });
+
     Route::group(['prefix' => 'room', 'middleware' => ['auth.jwt', 'assign.guard:collaborator']], function () {
         Route::post('verify', 'Room\VerifyRoomController@verifyRoom');
     });
@@ -107,4 +116,8 @@ Route::group(['prefix' => 'room'], function () {
     Route::get('/favorites', 'Room\RoomController@getRoomsByMostFavorite');
     Route::get('/latest', 'Room\RoomController@getLatestRoom');
     Route::get('/verified', 'Room\RoomController@getVerfiedRoom');
+});
+
+Route::group(['prefix' => 'banner'], function () {
+    Route::get('/home', 'Collaborator\BannerPostController@getHomepageBanner');
 });

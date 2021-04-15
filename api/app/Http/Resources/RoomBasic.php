@@ -14,7 +14,6 @@ class RoomBasic extends JsonResource
      */
     public function toArray($request)
     {
-
         return [
             'id' => $this['id'],
             'name' => $this['title'],
@@ -22,7 +21,7 @@ class RoomBasic extends JsonResource
             'gender' => $this['gender_type_id'],
             'price' => $this['price'],
             'acreage' => $this['acreage'],
-            'image' => $this['first_image']['image_url'],
+            'image' => isset($this['first_image']) ? $this['first_image']['image_url'] : null,
             'verified' => $this['verified'],
             'available' => $this['available'],
             'num_favorited' => count($this['favorites']),
