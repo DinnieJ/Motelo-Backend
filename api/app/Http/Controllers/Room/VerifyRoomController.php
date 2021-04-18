@@ -55,5 +55,39 @@ class VerifyRoomController extends Controller
 
     public function rejectRoom(Request $request)
     {
+        $room_id = $request->room_id;
+        $collaborator_id = auth('collaborator')->user()->id;
+
+        $room = $this->roomRepository->find($room_id);
+        $owner_id = $room->inn->owner_id;
+
+        if ($room->status == 0) {
+            return response()->json([
+                'message' => 'Phong da duoc huy bo roi'
+            ], 400);
+        }
+        
+        try {
+            $room->verified = 0;
+            $room->verified_at = null;
+            $room->status = 0;
+            $room->save();
+
+            $this->roomConfirmationRepository->create([
+                'owner_id' => $owner_id,
+                'room_id' => $room->id,
+                'status' => RoomConfirmation::REJECT_ROOM,
+                'reject_description' => $request->reject_description,
+                'confirmed_by' => $collaborator_id
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 502);
+        }
+
+        return response()->json([
+            'message' => 'Thanh cong'
+        ], 200);
     }
 }
