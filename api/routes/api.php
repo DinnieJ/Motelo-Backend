@@ -36,6 +36,9 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('logout', 'Auth\CollaboratorAuthController@logout')->middleware(['auth.jwt', 'assign.guard:collaborator']);
         Route::get('user', 'Auth\CollaboratorAuthController@getAuthUser')->middleware(['auth.jwt', 'assign.guard:collaborator']);
     });
+
+    Route::post('/change-password', 'Auth\AuthController@changePassword')->middleware(['auth.jwt']);
+    Route::post('/forgot-password', 'Auth\AuthController@forgotPassword');
 });
 Route::group(['prefix' => 'tenant'], function () {
     Route::get('test', 'TestController@tenantTest')->middleware(['auth.jwt', 'assign.guard:tenant']);
@@ -93,6 +96,7 @@ Route::group(['prefix' => 'collaborator'], function () {
 
     Route::group(['prefix' => 'room', 'middleware' => ['auth.jwt', 'assign.guard:collaborator']], function () {
         Route::post('verify', 'Room\VerifyRoomController@verifyRoom');
+        Route::post('reject', 'Room\VerifyRoomController@rejectRoom');
     });
 });
 
