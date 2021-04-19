@@ -88,7 +88,7 @@ class AuthController extends BaseController
             
             $newPassword = $this->randomString(12);
 
-            $user->password = \bcyrpt($newPassword);
+            $user->password = \bcrypt($newPassword);
             $user->save();
 
             SendEmail::dispatch([
