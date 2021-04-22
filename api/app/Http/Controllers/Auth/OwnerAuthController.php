@@ -141,6 +141,7 @@ class OwnerAuthController extends BaseController
                     $s3FileName = $this->getS3Filename($uploadImg);
 
                     $this->ownerImageRepository->create([
+                        'original_filename' => $image->getClientOriginalName(),
                         'owner_id' => $user->id,
                         'filename' => $s3FileName,
                         'image_url' => \Config::get('filesystems.s3_folder_path') . $uploadImg
