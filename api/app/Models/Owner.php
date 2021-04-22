@@ -52,4 +52,9 @@ class Owner extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Inn::class, 'owner_id');
     }
+
+    public function image()
+    {
+        return $this->hasOne(OwnerImage::class, 'owner_id');
+    }
 }

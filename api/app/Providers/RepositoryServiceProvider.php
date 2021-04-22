@@ -89,6 +89,10 @@ class RepositoryServiceProvider extends ServiceProvider
                 \App\Repositories\BannerPostImage\BannerPostImageRepositoryInterface::class,
                 \App\Repositories\BannerPostImage\BannerPostImageRepository::class
             ],
+            [
+                \App\Repositories\OwnerImage\OwnerImageRepositoryInterface::class,
+                \App\Repositories\OwnerImage\OwnerImageRepository::class
+            ]
         ];
 
         foreach ($repositories as $repo) {
