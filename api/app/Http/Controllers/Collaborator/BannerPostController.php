@@ -8,6 +8,7 @@ use App\Repositories\BannerPost\BannerPostRepositoryInterface;
 use App\Repositories\BannerPostImage\BannerPostImageRepositoryInterface;
 use App\Traits\FileHelper;
 use App\Http\Resources\BannerResource;
+use DB;
 
 class BannerPostController extends Controller
 {
@@ -53,6 +54,8 @@ class BannerPostController extends Controller
 
         $data['created_by'] = auth('collaborator')->user()->id;
         try {
+            DB::beginTransaction();
+
             $newBanner = $this->bannerPostRepository->create($data);
             $uploadImg = \Storage::disk('s3')->put("/banners/{$newBanner->id}", $image);
 
@@ -61,7 +64,10 @@ class BannerPostController extends Controller
                 'image_url' => \Config::get('filesystems.s3_folder_path') . $uploadImg,
                 'filename' => $this->getS3Filename($uploadImg)
             ]);
+
+            DB::commit();
         } catch (\Exception $e) {
+            DB::rollback();
             return response()->json([
                 'message' => $e->getMessage()
             ], 502);
@@ -86,6 +92,8 @@ class BannerPostController extends Controller
         }
 
         try {
+            \DB::beginTransaction();
+
             foreach ($data as $key => $value) {
                 $banner->{$key} = $value;
             }
@@ -116,7 +124,11 @@ class BannerPostController extends Controller
             }
 
             $banner->save();
+
+            \DB::commit();
         } catch (\Exception $e) {
+            \DB::rollback();
+
             return response()->json([
                 'message' => $e->getMessage()
             ], 502);
