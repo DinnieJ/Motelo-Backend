@@ -48,7 +48,7 @@ class BannerPostRepository extends BaseRepository implements BannerPostRepositor
 
     public function getBanner($id)
     {
-        $data = $this->with('image')->find($id);
+        $data = $this->with('image')->where('id', $id)->first();
 
         return $data;
     }

@@ -74,11 +74,11 @@ class BannerPostController extends Controller
 
     public function update(Request $request, $id)
     {
-        $data = $request->except('image');
+        $data = $request->only('title', 'url', 'start_time', 'end_time');
         
         $image = $request->file('image') ?? null;
 
-        $banner = $this->bannerPostRepository->find($id);
+        $banner = $this->bannerPostRepository->with('image')->where('id', $id)->first();
         if (!$banner) {
             return response()->json([
                 'message' => 'Không tìm thấy banner hoặc banner đã được xóa'
@@ -86,11 +86,45 @@ class BannerPostController extends Controller
         }
 
         try {
+            foreach ($data as $key => $value) {
+                $banner->{$key} = $value;
+            }
+
+            if ($image) {
+                $bannerImage = $banner->image;
+                if ($bannerImage) {
+                    \Storage::disk('s3')->delete("/banners/$banner->id/$bannerImage->filename");
+                    
+                    $uploadImg = \Storage::disk('s3')->put("/banners/$banner->id", $image);
+
+                    $s3FileName = $this->getS3Filename($uploadImg);
+                    $this->bannerPostImageRepository->update([
+                        'filename' => $s3FileName,
+                        'image_url' => \Config::get('filesystems.s3_folder_path') . $uploadImg
+                    ], $bannerImage->id);
+                } else {
+                    $uploadImg = \Storage::disk('s3')->put("banners/$banner->id", $image);
+                    
+                    $s3FileName = $this->getS3Filename($uploadImg);
+
+                    $this->bannerPostImageRepository->create([
+                        'banner_id' => $banner->id,
+                        'filename' => $s3FileName,
+                        'image_url' => \Config::get('filesystems.s3_folder_path') . $uploadImg
+                    ]);
+                }
+            }
+
+            $banner->save();
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
             ], 502);
         }
+
+        return response()->json([
+            'message' => "Cập nhật banner thành công"
+        ], 200);
     }
 
     public function delete($id)
