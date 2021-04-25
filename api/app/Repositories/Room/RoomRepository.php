@@ -201,7 +201,7 @@ class RoomRepository extends BaseRepository implements RoomRepositoryInterface
         ];
         $rooms = $this->with($withConditions)->where([
             'inn_id' => $inn_id
-        ])->paginate(4);
+        ])->paginate(8);
         return $rooms;
     }
 }

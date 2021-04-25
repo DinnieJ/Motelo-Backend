@@ -18,15 +18,14 @@ use App\Traits\FileHelper;
 use App\Traits\RoomHelper;
 use Illuminate\Http\Request;
 
-
 class RoomController extends BaseController
 {
-    //
+    use FileHelper;
+    use RoomHelper;
+    
     protected $roomRepository;
     protected $innRepository;
     protected $roomImageRepository;
-    use FileHelper;
-    use RoomHelper;
 
     /**
      * RoomController constructor.
@@ -34,10 +33,11 @@ class RoomController extends BaseController
      * @param $innRepository
      * @param $roomImageRepository
      */
-    public function __construct(RoomRepositoryInterface $roomRepository,
-                                InnRepositoryInterface $innRepository,
-                                RoomImageRepositoryInterface $roomImageRepository)
-    {
+    public function __construct(
+        RoomRepositoryInterface $roomRepository,
+        InnRepositoryInterface $innRepository,
+        RoomImageRepositoryInterface $roomImageRepository
+    ) {
         $this->roomRepository = $roomRepository;
         $this->innRepository = $innRepository;
         $this->roomImageRepository = $roomImageRepository;
@@ -70,7 +70,6 @@ class RoomController extends BaseController
         if ($rooms) {
             $rooms = $rooms->toArray();
             return response()->json(new ListRoomBasic($rooms), 200);
-
         }
     }
 
@@ -130,7 +129,6 @@ class RoomController extends BaseController
 
     public function createNewRoom(CreateRoomRequest $request)
     {
-
         $inn_id = auth('owner')->user()->inn->id;
         $room_data = $request->except('description');
         $room_description = $request->post('description') ?? null;
@@ -139,6 +137,8 @@ class RoomController extends BaseController
         $room_images = $request->file('images');
 
         try {
+            \DB::beginTransaction();
+
             $new_room = $this->roomRepository->create([
                 'title' => $room_data['title'],
                 'inn_id' => $inn_id,
@@ -154,14 +154,17 @@ class RoomController extends BaseController
             ]);
             //upload img
             $this->uploadRoomImages($room_images, $new_room->id);
-
+            
+            \DB::commit();
             return response()->json([
                 'message' => 'Đăng phòng thành công'
             ], 200);
         } catch (\Exception $e) {
+            \DB::rollback();
+            
             return response()->json([
                 'message' => $e->getMessage()
-            ], 500);
+            ], 502);
         }
     }
 
@@ -173,6 +176,8 @@ class RoomController extends BaseController
 
         try {
             if ($old_room) {
+                \DB::beginTransaction();
+
                 $data = $request->except('description');
                 $room_description = $request->post('description');
                 $data['description'] = isset($room_description) ? $room_description : null;
@@ -190,6 +195,8 @@ class RoomController extends BaseController
                     $this->deleteRoomImages($image_ids, $room_id);
                 }
 
+                \DB::commit();
+
                 return response()->json([
                     'message' => 'Cập nhật phòng thành công'
                 ], 200);
@@ -198,14 +205,13 @@ class RoomController extends BaseController
             return response()->json([
                 'message' => null
             ], 404);
-
-
         } catch (\Exception $e) {
+            \DB::rollback();
+
             return response()->json([
                 'message' => $e->getMessage()
             ], 500);
         }
-
     }
 
     public function deleteRoom(DeleteRoomRequest $request)
@@ -224,5 +230,4 @@ class RoomController extends BaseController
         }
         return response()->json(null, 404);
     }
-
 }

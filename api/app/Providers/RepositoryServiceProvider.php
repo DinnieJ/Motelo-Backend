@@ -80,6 +80,18 @@ class RepositoryServiceProvider extends ServiceProvider
             [
                 \App\Repositories\Collaborator\CollaboratorRepositoryInterface::class,
                 \App\Repositories\Collaborator\CollaboratorRepository::class
+            ],
+            [
+                \App\Repositories\BannerPost\BannerPostRepositoryInterface::class,
+                \App\Repositories\BannerPost\BannerPostRepository::class
+            ],
+            [
+                \App\Repositories\BannerPostImage\BannerPostImageRepositoryInterface::class,
+                \App\Repositories\BannerPostImage\BannerPostImageRepository::class
+            ],
+            [
+                \App\Repositories\OwnerImage\OwnerImageRepositoryInterface::class,
+                \App\Repositories\OwnerImage\OwnerImageRepository::class
             ]
         ];
 

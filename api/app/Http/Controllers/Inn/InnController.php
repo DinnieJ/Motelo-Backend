@@ -40,8 +40,7 @@ class InnController extends BaseController
         InnRepositoryInterface $innRepository,
         InnFeatureRepositoryInterface $innFeatureRepository,
         InnImageRepositoryInterface $innImageRepository
-    )
-    {
+    ) {
         $this->innRepository = $innRepository;
         $this->innFeatureRepository = $innFeatureRepository;
         $this->innImageRepository = $innImageRepository;
@@ -67,7 +66,6 @@ class InnController extends BaseController
             return response()->json(null, 404);
         }
         return response()->json(new BasicInnDetail($inn), 200);
-
     }
 
     public function createNewInn(CreateInnRequest $request)
@@ -123,7 +121,7 @@ class InnController extends BaseController
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Có lỗi xảy ra'
+                'message' => $e->getMessage()
             ], 500);
         }
     }
