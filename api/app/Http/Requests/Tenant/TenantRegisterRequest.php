@@ -29,7 +29,7 @@ class TenantRegisterRequest extends FormRequest
             'email' => 'required|email:rfc,dns|unique:tb_tenant,email',
             'password' => 'required|min:8',
             'date_of_birth' => 'required|date',
-            'name' => 'required|string|regex:/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]*$/'
+            'name' => 'required|string'
         ];
     }
 
@@ -45,7 +45,6 @@ class TenantRegisterRequest extends FormRequest
             'date_of_birth.date' => trans('responses.auth.date_of_birth.date'),
             'name.required' => trans('responses.auth.name.required'),
             'name.string' => trans('responses.auth.name.string'),
-            'name.regex' => trans('responses.auth.name.regex')
         ];
     }
 

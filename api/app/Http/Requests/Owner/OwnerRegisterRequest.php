@@ -29,8 +29,8 @@ class OwnerRegisterRequest extends FormRequest
             'email' => 'required|email|unique:tb_owner,email',
             'password' => 'required|min:8',
             'date_of_birth' => 'required|date',
-            'name' => 'required|string|regex:/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]*$/',
-            'address' => 'required|string|regex:/^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\,\-\.\s]*$/',
+            'name' => 'required|string',
+            'address' => 'required|string',
             'contacts' => 'required|array|min:1'
         ];
     }
@@ -47,9 +47,7 @@ class OwnerRegisterRequest extends FormRequest
             'date_of_birth.date' => trans('responses.auth.date_of_birth.date'),
             'name.required' => trans('responses.auth.name.required'),
             'name.string' => trans('responses.auth.name.string'),
-            'name.regex' => trans('responses.auth.name.alpha'),
             'address.required' => trans('responses.auth.address.required'),
-            'address.regex' => trans('responses.auth.address.regex'),
             'contacts.required' => trans('responses.auth.contact.required'),
             'contacts.min' => trans('responses.auth.contact.min')
         ];
