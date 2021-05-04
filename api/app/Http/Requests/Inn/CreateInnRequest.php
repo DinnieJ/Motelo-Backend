@@ -37,7 +37,6 @@ class CreateInnRequest extends FormRequest
             'close_minute' => 'required|integer',
             'address' => 'required',
             'location' => 'required'
-
         ];
     }
 

@@ -39,7 +39,7 @@ class UpdateInnRequest extends FormRequest
             'location' => 'required',
             'features' => 'required',
             'features.*' => 'required|integer|exists:mst_feature_type,id',
-            'new_images.*' => 'mimes:png,jpeg,jpg|max:5000',
+            'new_images.*' => 'mimes:png,jpeg,jpg',
             'delete_images.*' => 'integer|exists:tb_inn_image,id'
         ];
     }

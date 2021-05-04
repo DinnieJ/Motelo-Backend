@@ -91,6 +91,7 @@ class InnController extends BaseController
 
 
         try {
+            \DB::beginTransaction();
             $new_inn = $this->innRepository->create([
                 'name' => $inn_data['name'],
                 'owner_id' => $owner->id,
@@ -115,14 +116,15 @@ class InnController extends BaseController
                 ]);
             }
 
+            \DB::commit();
+
             return response()->json([
                 'message' => 'Tạo nhà trọ mới thành công',
                 'inn_id' => $new_inn->id
             ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 500);
+            \DB::rollback();
+            return response()->json($e->getMessage(), 500);
         }
     }
 
@@ -143,7 +145,7 @@ class InnController extends BaseController
                     'filename' => $s3FileName
                 ]);
             } catch (\Exception $exception) {
-                return $exception;
+                return response()->json($exception->getMessage(), 502);
             }
         }
         return response()->json([
